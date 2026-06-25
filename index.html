@@ -51,7 +51,7 @@ const T = {
     schedTitle:'행사 일정', schedIntro:'전시회 관람으로 시작해 따뜻한 식사를 나누고, 부활절 콘서트의 감동으로 마무리합니다.',
     tabTitle:'성막 전시회',
     tabBody:'성막(聖幕)은 하나님께서 모세에게 보여주신 하늘 성소의 모형입니다. 출애굽기의 말씀대로 정교히 재현된 성막을 거닐며, 번제단에서 지성소까지 이어지는 구원의 길을 눈으로 보고 마음으로 만나는 시간입니다.',
-    tabSlot1:'성막 전시 대표 사진', tabSlot2:'전시 사진',
+    tabSlot1:'헤롯 성전(제2성전) 모형', tabSlot2:'전시 사진',
     tabCard1Label:'관람 시간', tabCard1Val:'오후 5:30 ~ 6:00',
     tabCard2Label:'관람료', tabCard2Val:'무료 · 누구나 환영',
     mealTitle:'함께 나누는 저녁 식사', mealBadge:'전원 무료 제공',
@@ -79,7 +79,7 @@ const T = {
     schedTitle:'Schedule', schedIntro:'We begin with the exhibition, share a warm dinner together, and close with the moving Easter concert.',
     tabTitle:'Tabernacle Exhibition',
     tabBody:'The Tabernacle is the model of the heavenly sanctuary that God showed Moses. Walk through a faithful recreation built according to the book of Exodus, and trace the way of salvation from the bronze altar to the Most Holy Place — seen with your eyes and met in your heart.',
-    tabSlot1:'Main exhibition photo', tabSlot2:'Exhibition photo',
+    tabSlot1:'Herod’s Temple (Second Temple) — model', tabSlot2:'Exhibition photo',
     tabCard1Label:'Viewing', tabCard1Val:'5:30 – 6:00 PM',
     tabCard2Label:'Admission', tabCard2Val:'Free · All welcome',
     mealTitle:'Dinner Together', mealBadge:'Free for everyone',
@@ -138,14 +138,15 @@ const CONC_CALL = {
   en:'In 2021 this concert was produced as the film 〈Were You There〉 and broadcast worldwide through 257 networks, including FOX TV in the United States.'
 };
 const FURN = [
-  { ko:'번제단', en:'Altar of Burnt Offering' },
-  { ko:'물두멍', en:'Bronze Laver' },
-  { ko:'진설병 상', en:'Table of Showbread' },
-  { ko:'금 등잔대', en:'Golden Lampstand' },
-  { ko:'분향단', en:'Altar of Incense' },
-  { ko:'언약궤', en:'Ark of the Covenant' },
-  { ko:'속죄소 · 지성소', en:'Mercy Seat' }
+  { ko:'번제단', en:'Altar of Burnt Offering', img:'images/altar.jpg' },
+  { ko:'물두멍', en:'Bronze Laver', img:'images/laver.jpg' },
+  { ko:'진설병 상', en:'Table of Showbread', img:'images/showbread.jpg' },
+  { ko:'분향단', en:'Altar of Incense', img:'images/incense.jpg' },
+  { ko:'언약궤', en:'Ark of the Covenant', img:'images/ark.jpg' },
+  { ko:'성소', en:'The Holy Place', img:'images/holyplace.jpg' },
+  { ko:'어린 양', en:'The Lamb', img:'images/lamb.jpg' }
 ];
+const TAB_MAIN = 'images/tabernacle.jpg';
 
 const SHOW_VIDEO = true;
 const SHOW_GALLERY = true;
@@ -183,7 +184,7 @@ function render(){
     const name = x[lang]; const en = lang==='ko' ? x.en : x.ko;
     return `
     <div style="display:flex; flex-direction:column; gap:9px;">
-      <div class="slot" style="width:100%; height:130px; border-radius:6px;">${esc(name)}</div>
+      <img src="${esc(x.img)}" alt="${esc(name)}" loading="lazy" style="width:100%; height:140px; object-fit:cover; border-radius:6px; display:block; box-shadow:0 6px 16px rgba(0,0,0,.30);">
       <div style="text-align:center;">
         <p style="margin:0; font-family:'Noto Serif KR'; font-size:14px; font-weight:600; color:#F0E6CF;">${esc(name)}</p>
         <p style="margin:2px 0 0; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:13px; color:#9A8D6C;">${esc(en)}</p>
@@ -275,7 +276,8 @@ function render(){
       <p style="margin:0 0 8px; text-align:center; font-size:11px; letter-spacing:4px; color:#B7935A; text-transform:uppercase;">${esc(t.kExhibit)}</p>
       <h2 style="margin:0 0 18px; text-align:center; font-family:'Noto Serif KR',serif; font-weight:600; font-size:28px; color:#F6F0E2;">${esc(t.tabTitle)}</h2>
       <p style="margin:0 auto 26px; text-align:center; font-size:14px; line-height:1.95; color:#CFC6AE; max-width:470px;">${esc(t.tabBody)}</p>
-      <div class="slot" style="width:100%; height:220px; border-radius:6px;">${esc(t.tabSlot1)}</div>
+      <img src="${TAB_MAIN}" alt="${esc(t.tabSlot1)}" style="width:100%; height:300px; object-fit:cover; border-radius:6px; display:block; box-shadow:0 14px 34px rgba(0,0,0,.45);">
+      <p style="margin:9px 0 0; text-align:center; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:13px; color:#9A8D6C;">${esc(t.tabSlot1)}</p>
       <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin:34px auto 22px; max-width:280px;">
         <span style="flex:1; height:1px; background:rgba(183,147,90,.4);"></span>
         <span style="font-size:11px; letter-spacing:3px; color:#B7935A; text-transform:uppercase; white-space:nowrap;">${esc(t.furnTitle)}</span>
