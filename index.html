@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>성막전시회 & 부활절 콘서트 · 2026.7.15 BEXCO</title>
+<meta name="description" content="성막 전시회 그리고 부활절 콘서트 〈Were You There〉 — 2026년 7월 15일 (수) 오후 5시 30분, 부산 벡스코(BEXCO). 크리스천 리더스 펠로십 주최.">
+<meta property="og:title" content="성막전시회 & 부활절 콘서트">
+<meta property="og:description" content="2026.7.15 (수) 오후 5:30 · 부산 벡스코(BEXCO) · 무료 입장">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ margin:0; background:#0b0e1d; }
+  ::selection{ background:#B7935A; color:#0b0e1d; }
+  @keyframes glow{ 0%,100%{ opacity:.35;} 50%{ opacity:.6;} }
+  @keyframes fadeUp2{ from{ opacity:0; transform:translateY(14px);} to{ opacity:1; transform:translateY(0);} }
+  .scrollx::-webkit-scrollbar{ height:6px; }
+  .scrollx::-webkit-scrollbar-thumb{ background:rgba(183,147,90,.4); border-radius:4px; }
+  .slot{ display:flex; align-items:center; justify-content:center; text-align:center; padding:10px;
+    background:linear-gradient(135deg, rgba(183,147,90,.10), rgba(183,147,90,.03));
+    border:1px dashed rgba(183,147,90,.35); color:#9A8D6C; font-size:12.5px; letter-spacing:.5px;
+    font-family:'Noto Serif KR',serif; }
+  a{ -webkit-tap-highlight-color: transparent; }
+</style>
+</head>
+<body>
+
+<div id="app" style="font-family:'Noto Sans KR',sans-serif; color:#EDE6D6; background:#0b0e1d; max-width:760px; margin:0 auto; box-shadow:0 0 80px rgba(0,0,0,.5); overflow:hidden;"></div>
+
+<script>
+/* ============================================================
+   성막전시회 & 부활절 콘서트 — 단독 정적 사이트
+   (Claude Design .dc.html 을 런타임 없이 동작하도록 변환)
+   ============================================================ */
+
+/* 구글폼 등 신청 링크가 생기면 아래에 넣으세요.
+   비워두면 모든 신청 버튼이 페이지 하단 신청 안내로 스크롤됩니다. */
+const FORM_URL = "";
+
+const T = {
+  ko: {
+    brand:'성막전시회 & 부활절 콘서트', navApply:'참가 신청',
+    heroKicker:'크리스천 리더스 펠로십 주최',
+    heroLine1:'성막 전시회', heroLine2:'그리고', heroLine3:'부활절 콘서트',
+    heroDateBig:'2026. 7. 15 水', heroDateSub:'오후 5시 30분 · 부산 벡스코(BEXCO)',
+    ctaApply:'참가 신청하기', ctaSchedule:'행사 일정 보기',
+    schedTitle:'행사 일정', schedIntro:'전시회 관람으로 시작해 따뜻한 식사를 나누고, 부활절 콘서트의 감동으로 마무리합니다.',
+    tabTitle:'성막 전시회',
+    tabBody:'성막(聖幕)은 하나님께서 모세에게 보여주신 하늘 성소의 모형입니다. 출애굽기의 말씀대로 정교히 재현된 성막을 거닐며, 번제단에서 지성소까지 이어지는 구원의 길을 눈으로 보고 마음으로 만나는 시간입니다.',
+    tabSlot1:'성막 전시 대표 사진', tabSlot2:'전시 사진',
+    tabCard1Label:'관람 시간', tabCard1Val:'오후 5:30 ~ 6:00',
+    tabCard2Label:'관람료', tabCard2Val:'무료 · 누구나 환영',
+    mealTitle:'함께 나누는 저녁 식사', mealBadge:'전원 무료 제공',
+    concTitle:'부활절 콘서트',
+    progTitle:'프로그램',
+    locTitle:'오시는 길', locVenue:'부산 벡스코 (BEXCO)',
+    locAddr:'부산광역시 해운대구 APEC로 55', locAddrNote:'상세 전시홀·주차 안내는 추후 공지',
+    locDate:'2026년 7월 15일 (수)', locTime:'오후 5시 30분 입장 · 6시 30분 콘서트 시작',
+    regTitle:'참가 신청', regIntro:'식사 준비를 위해 미리 신청해 주세요. 참가비는 없습니다.',
+    regNote:'참가 신청은 구글폼으로 받습니다.\n아래 버튼을 눌러 신청서를 작성해 주세요.', regBtn:'신청서 작성하기 (구글폼)', regSub:'식사 준비를 위해 미리 신청해 주세요 · 참가비 무료',
+    furnTitle:'성막의 기구들',
+    footDate:'2026. 7. 15 (수) · 부산 벡스코', footHostPre:'주최 ', footHost:'크리스천 리더스 펠로십',
+    footSponsorPre:'후원 ', footSponsor:'모닝듀워십',
+    footContact:'문의 안내는 추후 공지됩니다',
+    cdDays:'DAYS', cdHrs:'HRS', cdMin:'MIN', cdSec:'SEC',
+    kProgram:'Program of the Day', kExhibit:'Exhibition · 17:30', kDinner:'Dinner · 18:00',
+    kConcert:'Easter Concert · 18:30', kVenue:'Venue', kReg:'Registration'
+  },
+  en: {
+    brand:'Tabernacle Exhibition & Easter Concert', navApply:'Register',
+    heroKicker:'Hosted by Christian Leaders Fellowship',
+    heroLine1:'Tabernacle', heroLine2:'&', heroLine3:'Easter Concert',
+    heroDateBig:'Wed · July 15, 2026', heroDateSub:'5:30 PM · BEXCO, Busan',
+    ctaApply:'Register Now', ctaSchedule:'View Schedule',
+    schedTitle:'Schedule', schedIntro:'We begin with the exhibition, share a warm dinner together, and close with the moving Easter concert.',
+    tabTitle:'Tabernacle Exhibition',
+    tabBody:'The Tabernacle is the model of the heavenly sanctuary that God showed Moses. Walk through a faithful recreation built according to the book of Exodus, and trace the way of salvation from the bronze altar to the Most Holy Place — seen with your eyes and met in your heart.',
+    tabSlot1:'Main exhibition photo', tabSlot2:'Exhibition photo',
+    tabCard1Label:'Viewing', tabCard1Val:'5:30 – 6:00 PM',
+    tabCard2Label:'Admission', tabCard2Val:'Free · All welcome',
+    mealTitle:'Dinner Together', mealBadge:'Free for everyone',
+    concTitle:'Easter Concert',
+    progTitle:'Program',
+    locTitle:'Location', locVenue:'BEXCO, Busan',
+    locAddr:'55 APEC-ro, Haeundae-gu, Busan', locAddrNote:'Hall & parking details to be announced',
+    locDate:'Wednesday, July 15, 2026', locTime:'Doors 5:30 PM · Concert begins 6:30 PM',
+    regTitle:'Register', regIntro:'Please register in advance so we can prepare the meal. Admission is free.',
+    regNote:'Registration is handled through a Google Form.\nTap the button below to fill out the form.', regBtn:'Open Registration Form', regSub:'Please register early so we can prepare the meal · Free admission',
+    furnTitle:'Furnishings of the Tabernacle',
+    footDate:'Wed, July 15, 2026 · BEXCO, Busan', footHostPre:'Hosted by ', footHost:'Christian Leaders Fellowship',
+    footSponsorPre:'Sponsored by ', footSponsor:'Morning Dew Worship',
+    footContact:'Contact details to be announced',
+    cdDays:'DAYS', cdHrs:'HRS', cdMin:'MIN', cdSec:'SEC',
+    kProgram:'Program of the Day', kExhibit:'Exhibition · 17:30', kDinner:'Dinner · 18:00',
+    kConcert:'Easter Concert · 18:30', kVenue:'Venue', kReg:'Registration'
+  }
+};
+const SCHED = {
+  ko:[
+    { time:'17:30', title:'성막 전시회 관람', desc:'하나님의 임재의 모형, 성막을 거닐며 묵상합니다.', tag:'' },
+    { time:'18:00', title:'저녁 식사', desc:'정성껏 준비한 식사를 함께 나눕니다.', tag:'무료 제공' },
+    { time:'18:30', title:'부활절 콘서트 〈Were You There〉', desc:'그라시아스 합창단·오케스트라의 부활의 울림.', tag:'' }
+  ],
+  en:[
+    { time:'5:30', title:'Tabernacle Exhibition', desc:'Walk through the tabernacle, a model of God’s presence.', tag:'' },
+    { time:'6:00', title:'Dinner', desc:'Share a meal prepared with care.', tag:'Free' },
+    { time:'6:30', title:'Easter Concert 〈Were You There〉', desc:'Resurrection echoes of Gracias Choir & Orchestra.', tag:'' }
+  ]
+};
+const PROG = {
+  ko:[
+    { title:'기억하라', by:'D. Govenor' }, { title:'Pie Jesu', by:'A. L. Webber' },
+    { title:'갈보리 산 위에', by:'G. Bennard' }, { title:'Were You There', by:'Traditional Spiritual' },
+    { title:'무덤에 머물러', by:'R. Lowry' }, { title:'살아계신 주', by:'W. J. Gaither' },
+    { title:'예수 부활했으니', by:'C. Wesley' }
+  ],
+  en:[
+    { title:'Remember', by:'D. Govenor' }, { title:'Pie Jesu', by:'A. L. Webber' },
+    { title:'The Old Rugged Cross', by:'G. Bennard' }, { title:'Were You There', by:'Traditional Spiritual' },
+    { title:'Low in the Grave He Lay', by:'R. Lowry' }, { title:'Because He Lives', by:'W. J. Gaither' },
+    { title:'Christ the Lord Is Risen Today', by:'C. Wesley' }
+  ]
+};
+const MEAL_BODY = {
+  ko:'전시회 관람 후, 정성껏 준비한 저녁 식사를 무료로 제공합니다. 식탁의 교제 가운데 마음을 나눠 주세요.',
+  en:'After the exhibition, a dinner prepared with care is provided free of charge. Please share in the fellowship of the table.'
+};
+const CONC_BODY = {
+  ko:'부활절 콘서트 〈Were You There〉는 성경 속 예수 그리스도의 고난과 부활의 기록을 무대 위에 그대로 그려냅니다. 그라시아스 합창단과 오케스트라가 빚어내는 깊은 울림은 부활의 진정한 의미와 그 기쁨을 새롭게 일깨워 줍니다.',
+  en:'The Easter concert 〈Were You There〉 brings the biblical record of Jesus Christ’s suffering and resurrection to the stage. The deep resonance of Gracias Choir and Orchestra awakens anew the true meaning and joy of the resurrection.'
+};
+const CONC_CALL = {
+  ko:'이 콘서트는 2021년 영화 〈Were You There〉로 제작되어, 미국 FOX TV를 비롯해 세계 각국 257개 방송사를 통해 전 세계에 방영되었습니다.',
+  en:'In 2021 this concert was produced as the film 〈Were You There〉 and broadcast worldwide through 257 networks, including FOX TV in the United States.'
+};
+const FURN = [
+  { ko:'번제단', en:'Altar of Burnt Offering' },
+  { ko:'물두멍', en:'Bronze Laver' },
+  { ko:'진설병 상', en:'Table of Showbread' },
+  { ko:'금 등잔대', en:'Golden Lampstand' },
+  { ko:'분향단', en:'Altar of Incense' },
+  { ko:'언약궤', en:'Ark of the Covenant' },
+  { ko:'속죄소 · 지성소', en:'Mercy Seat' }
+];
+
+const SHOW_VIDEO = true;
+const SHOW_GALLERY = true;
+const SHOW_COUNTDOWN = true;
+
+let lang = 'ko';
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const formHref = () => (FORM_URL && FORM_URL.trim()) ? FORM_URL : '#register';
+
+function render(){
+  const t = T[lang];
+  document.documentElement.lang = lang;
+  const fUrl = formHref();
+  const koSty = "cursor:pointer; font-family:'Noto Sans KR'; font-size:12px; font-weight:700; letter-spacing:1px; padding:6px 16px; border:none; border-radius:999px; transition:all .18s; "
+    + (lang==='ko' ? 'background:#F2C24E; color:#1A1A1A;' : 'background:transparent; color:#8E876E;');
+  const enSty = "cursor:pointer; font-family:'Noto Sans KR'; font-size:12px; font-weight:700; letter-spacing:1px; padding:6px 16px; border:none; border-radius:999px; transition:all .18s; "
+    + (lang==='en' ? 'background:#F2C24E; color:#1A1A1A;' : 'background:transparent; color:#8E876E;');
+
+  const schedule = SCHED[lang].map(item => `
+    <div style="position:relative; display:flex; gap:20px; padding:0 0 26px;">
+      <div style="position:relative; z-index:2; flex:0 0 88px; text-align:right;">
+        <span style="font-family:'Noto Serif KR'; font-weight:600; font-size:19px; color:#1A2238;">${esc(item.time)}</span>
+      </div>
+      <span style="position:relative; z-index:2; flex:0 0 14px; margin-top:5px; width:14px; height:14px; border-radius:50%; background:#FAF6EC; border:3px solid #B7935A;"></span>
+      <div style="flex:1; padding-bottom:4px;">
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          <h3 style="margin:0; font-family:'Noto Serif KR'; font-weight:600; font-size:16.5px; color:#222;">${esc(item.title)}</h3>
+          ${item.tag ? `<span style="font-size:10.5px; font-weight:700; letter-spacing:.5px; color:#6E2433; background:#F4E3D6; padding:3px 9px; border-radius:999px;">${esc(item.tag)}</span>` : ''}
+        </div>
+        <p style="margin:5px 0 0; font-size:13px; color:#6B6657; line-height:1.6;">${esc(item.desc)}</p>
+      </div>
+    </div>`).join('');
+
+  const furniture = FURN.map(x => {
+    const name = x[lang]; const en = lang==='ko' ? x.en : x.ko;
+    return `
+    <div style="display:flex; flex-direction:column; gap:9px;">
+      <div class="slot" style="width:100%; height:130px; border-radius:6px;">${esc(name)}</div>
+      <div style="text-align:center;">
+        <p style="margin:0; font-family:'Noto Serif KR'; font-size:14px; font-weight:600; color:#F0E6CF;">${esc(name)}</p>
+        <p style="margin:2px 0 0; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:13px; color:#9A8D6C;">${esc(en)}</p>
+      </div>
+    </div>`;
+  }).join('');
+
+  const program = PROG[lang].map(p => `
+    <div style="display:flex; align-items:baseline; justify-content:space-between; gap:14px; padding:11px 4px; border-bottom:1px solid #EAE0CB;">
+      <span style="font-family:'Noto Serif KR'; font-size:14.5px; font-weight:500; color:#28282E;">${esc(p.title)}</span>
+      <span style="font-family:'Cormorant Garamond',serif; font-size:14px; font-style:italic; color:#8C7A53; white-space:nowrap;">${esc(p.by)}</span>
+    </div>`).join('');
+
+  const countdown = SHOW_COUNTDOWN ? `
+    <div style="margin:30px auto 0; display:flex; justify-content:center; gap:10px;">
+      ${['d','h','m','s'].map((k,i)=>`
+      <div style="display:flex; flex-direction:column; align-items:center; min-width:58px; padding:12px 6px; border-radius:6px; background:rgba(255,255,255,.04); border:1px solid rgba(183,147,90,.18);">
+        <span id="cd-${k}" style="font-family:'Noto Serif KR'; font-size:24px; font-weight:600; color:${i===3?'#C9A35E':'#F3ECDC'};">–</span>
+        <span style="font-size:10px; letter-spacing:2px; color:#9A916F; margin-top:3px;">${[t.cdDays,t.cdHrs,t.cdMin,t.cdSec][i]}</span>
+      </div>`).join('')}
+    </div>` : '';
+
+  const video = SHOW_VIDEO ? `
+    <div style="margin:26px 0 0; position:relative; width:100%; padding-bottom:56.25%; border-radius:8px; overflow:hidden; background:#1A2238; box-shadow:0 12px 30px rgba(26,34,56,.2);">
+      <iframe src="https://www.youtube.com/embed/y7jh5_GP2Ek" title="Were You There" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute; inset:0; width:100%; height:100%; border:0;"></iframe>
+    </div>` : '';
+
+  const gallery = SHOW_GALLERY ? `
+    <div class="scrollx" style="margin:22px -24px 0; padding:4px 24px; display:flex; gap:12px; overflow-x:auto;">
+      ${[1,3,5,7,9].map(n=>`<img src="https://www.graciaschoir.com/images/concert/eastercantata/eastercantata_photo0${n}.jpg" referrerpolicy="no-referrer" alt="" style="height:150px; border-radius:6px; flex:0 0 auto;">`).join('')}
+    </div>` : '';
+
+  document.getElementById('app').innerHTML = `
+  <!-- sticky bar -->
+  <div style="position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between; padding:11px 18px; background:rgba(11,14,29,.82); backdrop-filter:blur(12px); border-bottom:1px solid rgba(183,147,90,.22);">
+    <div style="display:flex; flex-direction:column; line-height:1.15;">
+      <span style="font-family:'Noto Serif KR',serif; font-weight:600; font-size:13.5px; letter-spacing:.4px; color:#F3ECDC;">${esc(t.brand)}</span>
+      <span style="font-size:10.5px; letter-spacing:2px; color:#B7935A; text-transform:uppercase;">2026 · 07 · 15</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:9px;">
+      <div style="display:flex; align-items:center; padding:3px; background:rgba(0,0,0,.35); border:1px solid rgba(183,147,90,.45); border-radius:999px;">
+        <button onclick="setLang('ko')" style="${koSty}">KO</button>
+        <button onclick="setLang('en')" style="${enSty}">EN</button>
+      </div>
+      <a href="${esc(fUrl)}" ${FORM_URL?'target="_blank" rel="noopener noreferrer"':''} style="font-family:'Noto Sans KR'; text-decoration:none; font-size:12.5px; font-weight:700; color:#0b0e1d; background:#B7935A; padding:9px 16px; border-radius:999px; letter-spacing:.5px;">${esc(t.navApply)}</a>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section style="position:relative; padding:70px 24px 64px; text-align:center; background:radial-gradient(125% 85% at 50% -5%, #20294e 0%, #131932 48%, #0b0e1d 100%); overflow:hidden;">
+    <div style="position:absolute; inset:0; background:radial-gradient(60% 40% at 50% 18%, rgba(183,147,90,.20), transparent 70%); animation:glow 6s ease-in-out infinite; pointer-events:none;"></div>
+    <div style="position:relative;">
+      <p style="margin:0 0 22px; font-size:11px; letter-spacing:4px; color:#B7935A; text-transform:uppercase;">${esc(t.heroKicker)}</p>
+      <div style="display:flex; align-items:center; justify-content:center; gap:14px; margin:0 auto 22px; max-width:320px;">
+        <span style="flex:1; height:1px; background:linear-gradient(90deg,transparent,rgba(183,147,90,.55));"></span>
+        <span style="width:6px; height:6px; background:#B7935A; transform:rotate(45deg);"></span>
+        <span style="flex:1; height:1px; background:linear-gradient(90deg,rgba(183,147,90,.55),transparent);"></span>
+      </div>
+      <h1 style="margin:0; font-family:'Noto Serif KR',serif; font-weight:600; font-size:40px; line-height:1.28; color:#F6F0E2; letter-spacing:-.5px;">${esc(t.heroLine1)}<br><span style="font-weight:300; font-size:34px; color:#E6DcC4;">${esc(t.heroLine2)}</span><br>${esc(t.heroLine3)}</h1>
+      <p style="margin:18px 0 0; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:22px; color:#C9A35E; letter-spacing:.5px;">&ldquo;Were You There&rdquo;</p>
+      <div style="margin:34px auto 0; display:inline-flex; flex-direction:column; gap:7px; padding:18px 30px; border:1px solid rgba(183,147,90,.30); border-radius:4px; background:rgba(255,255,255,.02);">
+        <span style="font-family:'Noto Serif KR',serif; font-size:19px; color:#F3ECDC; letter-spacing:.5px;">${esc(t.heroDateBig)}</span>
+        <span style="font-size:13px; color:#B8B097; letter-spacing:1px;">${esc(t.heroDateSub)}</span>
+      </div>
+      ${countdown}
+      <div style="margin:34px auto 0; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+        <a href="${esc(fUrl)}" ${FORM_URL?'target="_blank" rel="noopener noreferrer"':''} style="text-decoration:none; font-size:14px; font-weight:700; color:#0b0e1d; background:#B7935A; padding:14px 30px; border-radius:999px; letter-spacing:.5px;">${esc(t.ctaApply)}</a>
+        <a href="#schedule" style="text-decoration:none; font-size:14px; font-weight:500; color:#E6DcC4; padding:14px 26px; border-radius:999px; letter-spacing:.5px; border:1px solid rgba(183,147,90,.4);">${esc(t.ctaSchedule)}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHEDULE -->
+  <section id="schedule" style="padding:58px 24px; background:#FAF6EC; color:#2A2A33;">
+    <div style="max-width:560px; margin:0 auto;">
+      <p style="margin:0 0 8px; text-align:center; font-size:11px; letter-spacing:4px; color:#B7935A; text-transform:uppercase;">${esc(t.kProgram)}</p>
+      <h2 style="margin:0 0 8px; text-align:center; font-family:'Noto Serif KR',serif; font-weight:600; font-size:28px; color:#1A2238;">${esc(t.schedTitle)}</h2>
+      <p style="margin:0 auto 40px; text-align:center; font-size:13.5px; color:#6B6657; max-width:400px; line-height:1.7;">${esc(t.schedIntro)}</p>
+      <div style="position:relative;">
+        <span style="position:absolute; left:43px; top:8px; bottom:8px; width:2px; background:linear-gradient(180deg,#E3D6B8,#D8C49A,#E3D6B8);"></span>
+        ${schedule}
+      </div>
+    </div>
+  </section>
+
+  <!-- TABERNACLE -->
+  <section style="padding:62px 24px; background:radial-gradient(120% 70% at 50% 0%, #1a2140 0%, #0e1226 60%, #0b0e1d 100%); color:#EDE6D6;">
+    <div style="max-width:560px; margin:0 auto;">
+      <p style="margin:0 0 8px; text-align:center; font-size:11px; letter-spacing:4px; color:#B7935A; text-transform:uppercase;">${esc(t.kExhibit)}</p>
+      <h2 style="margin:0 0 18px; text-align:center; font-family:'Noto Serif KR',serif; font-weight:600; font-size:28px; color:#F6F0E2;">${esc(t.tabTitle)}</h2>
+      <p style="margin:0 auto 26px; text-align:center; font-size:14px; line-height:1.95; color:#CFC6AE; max-width:470px;">${esc(t.tabBody)}</p>
+      <div class="slot" style="width:100%; height:220px; border-radius:6px;">${esc(t.tabSlot1)}</div>
+      <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin:34px auto 22px; max-width:280px;">
+        <span style="flex:1; height:1px; background:rgba(183,147,90,.4);"></span>
+        <span style="font-size:11px; letter-spacing:3px; color:#B7935A; text-transform:uppercase; white-space:nowrap;">${esc(t.furnTitle)}</span>
+        <span style="flex:1; height:1px; background:rgba(183,147,90,.4);"></span>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+        ${furniture}
+      </div>
+      <div style="margin:30px 0 0; display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <div style="padding:18px 18px; border:1px solid rgba(183,147,90,.25); border-radius:6px; background:rgba(255,255,255,.02);">
+          <p style="margin:0 0 4px; font-family:'Noto Serif KR'; font-size:14px; font-weight:600; color:#E9C98A;">${esc(t.tabCard1Label)}</p>
+          <p style="margin:0; font-size:13px; color:#C2BAA0;">${esc(t.tabCard1Val)}</p>
+        </div>
+        <div style="padding:18px 18px; border:1px solid rgba(183,147,90,.25); border-radius:6px; background:rgba(255,255,255,.02);">
+          <p style="margin:0 0 4px; font-family:'Noto Serif KR'; font-size:14px; font-weight:600; color:#E9C98A;">${esc(t.tabCard2Label)}</p>
+          <p style="margin:0; font-size:13px; color:#C2BAA0;">${esc(t.tabCard2Val)}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEAL -->
+  <section style="padding:40px 24px; background:#6E2433; color:#F6EFE4; text-align:center;">
+    <div style="max-width:520px; margin:0 auto;">
+      <p style="margin:0 0 6px; font-size:11px; letter-spacing:4px; color:#E6BCA0; text-transform:uppercase;">${esc(t.kDinner)}</p>
+      <h3 style="margin:0 0 10px; font-family:'Noto Serif KR'; font-weight:600; font-size:23px; color:#FBF3E6;">${esc(t.mealTitle)}</h3>
+      <p style="margin:0; font-size:14px; line-height:1.8; color:#EAD6C8;">${esc(MEAL_BODY[lang])}</p>
+      <span style="display:inline-block; margin-top:16px; font-size:12px; font-weight:700; letter-spacing:1px; color:#6E2433; background:#F0D9B5; padding:8px 20px; border-radius:999px;">${esc(t.mealBadge)}</span>
+    </div>
+  </section>
+
+  <!-- CONCERT -->
+  <section style="padding:62px 24px; background:#FAF6EC; color:#2A2A33;">
+    <div style="max-width:560px; margin:0 auto;">
+      <p style="margin:0 0 8px; text-align:center; font-size:11px; letter-spacing:4px; color:#B7935A; text-transform:uppercase;">${esc(t.kConcert)}</p>
+      <h2 style="margin:0 0 6px; text-align:center; font-family:'Noto Serif KR',serif; font-weight:600; font-size:28px; color:#1A2238;">${esc(t.concTitle)}</h2>
+      <p style="margin:0 0 22px; text-align:center; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:23px; color:#B7935A;">Were You There</p>
+      <img src="https://www.graciaschoir.com/images/concert/eastercantata/graciaschoir_easter_main02.jpg" alt="Easter Concert" referrerpolicy="no-referrer" style="width:100%; height:auto; border-radius:8px; display:block; box-shadow:0 14px 34px rgba(26,34,56,.18);">
+      <p style="margin:26px 0 0; font-size:14px; line-height:2; color:#46443E; text-align:center;">${esc(CONC_BODY[lang])}</p>
+      <div style="margin:22px 0 0; padding:16px 18px; border-left:3px solid #B7935A; background:#F3EAD6; border-radius:0 6px 6px 0;">
+        <p style="margin:0; font-size:12.5px; line-height:1.8; color:#5A5648;">${esc(CONC_CALL[lang])}</p>
+      </div>
+      ${video}
+      ${gallery}
+      <h3 style="margin:38px 0 4px; text-align:center; font-family:'Noto Serif KR'; font-weight:600; font-size:18px; color:#1A2238;">${esc(t.progTitle)}</h3>
+      <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin:0 auto 20px; max-width:200px;">
+        <span style="flex:1; height:1px; background:rgba(183,147,90,.5);"></span>
+        <span style="width:5px; height:5px; background:#B7935A; transform:rotate(45deg);"></span>
+        <span style="flex:1; height:1px; background:rgba(183,147,90,.5);"></span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:2px;">
+        ${program}
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCATION -->
+  <section style="padding:58px 24px; background:#131932; color:#EDE6D6;">
+    <div style="max-width:560px; margin:0 auto;">
+      <p style="margin:0 0 8px; text-align:center; font-size:11px; letter-spacing:4px; color:#B7935A; text-transform:uppercase;">${esc(t.kVenue)}</p>
+      <h2 style="margin:0 0 26px; text-align:center; font-family:'Noto Serif KR',serif; font-weight:600; font-size:26px; color:#F6F0E2;">${esc(t.locTitle)}</h2>
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <div style="display:flex; gap:14px; align-items:flex-start; padding:16px 18px; border:1px solid rgba(183,147,90,.22); border-radius:8px; background:rgba(255,255,255,.02);">
+          <span style="font-size:20px;">📍</span>
+          <div>
+            <p style="margin:0 0 3px; font-family:'Noto Serif KR'; font-weight:600; font-size:15px; color:#F3ECDC;">${esc(t.locVenue)}</p>
+            <p style="margin:0; font-size:13px; color:#B8B097; line-height:1.6;">${esc(t.locAddr)}<br><span style="color:#8E876E;">${esc(t.locAddrNote)}</span></p>
+          </div>
+        </div>
+        <div style="display:flex; gap:14px; align-items:flex-start; padding:16px 18px; border:1px solid rgba(183,147,90,.22); border-radius:8px; background:rgba(255,255,255,.02);">
+          <span style="font-size:20px;">🕔</span>
+          <div>
+            <p style="margin:0 0 3px; font-family:'Noto Serif KR'; font-weight:600; font-size:15px; color:#F3ECDC;">${esc(t.locDate)}</p>
+            <p style="margin:0; font-size:13px; color:#B8B097; line-height:1.6;">${esc(t.locTime)}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REGISTER -->
+  <section id="register" style="padding:62px 24px 70px; background:radial-gradient(120% 80% at 50% 0%, #20294e 0%, #131932 55%, #0b0e1d 100%); color:#EDE6D6;">
+    <div style="max-width:480px; margin:0 auto;">
+      <p style="margin:0 0 8px; text-align:center; font-size:11px; letter-spacing:4px; color:#B7935A; text-transform:uppercase;">${esc(t.kReg)}</p>
+      <h2 style="margin:0 0 8px; text-align:center; font-family:'Noto Serif KR',serif; font-weight:600; font-size:28px; color:#F6F0E2;">${esc(t.regTitle)}</h2>
+      <p style="margin:0 0 28px; text-align:center; font-size:13px; color:#B8B097; line-height:1.7;">${esc(t.regIntro)}</p>
+      <div style="padding:36px 26px; text-align:center; background:rgba(255,255,255,.035); border:1px solid rgba(183,147,90,.22); border-radius:12px;">
+        <div style="width:52px; height:52px; margin:0 auto 18px; border-radius:50%; background:rgba(183,147,90,.14); border:1px solid rgba(183,147,90,.4); display:flex; align-items:center; justify-content:center; font-size:24px;">✉️</div>
+        <p style="margin:0 0 22px; font-size:13.5px; color:#C2BAA0; line-height:1.8; white-space:pre-line;">${esc(t.regNote)}</p>
+        <a href="${esc(FORM_URL && FORM_URL.trim() ? FORM_URL : '#')}" ${FORM_URL?'target="_blank" rel="noopener noreferrer"':''} style="display:inline-block; text-decoration:none; font-family:'Noto Sans KR'; font-size:15px; font-weight:700; letter-spacing:.5px; color:#0b0e1d; background:#B7935A; border-radius:8px; padding:16px 38px;">${esc(t.regBtn)}</a>
+        <p style="margin:18px 0 0; font-size:11.5px; color:#8E876E;">${esc(t.regSub)}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="padding:38px 24px 46px; background:#080a16; text-align:center;">
+    <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin:0 auto 18px; max-width:220px;">
+      <span style="flex:1; height:1px; background:rgba(183,147,90,.35);"></span>
+      <span style="width:5px; height:5px; background:#B7935A; transform:rotate(45deg);"></span>
+      <span style="flex:1; height:1px; background:rgba(183,147,90,.35);"></span>
+    </div>
+    <p style="margin:0 0 6px; font-family:'Noto Serif KR'; font-size:15px; font-weight:600; color:#E6DcC4; letter-spacing:.5px;">${esc(t.brand)}</p>
+    <p style="margin:0 0 16px; font-size:12px; color:#7E7860; letter-spacing:1px;">${esc(t.footDate)}</p>
+    <p style="margin:0 0 6px; font-size:12.5px; color:#9A916F; line-height:1.9;">${esc(t.footHostPre)}<strong style="color:#C9A35E;">${esc(t.footHost)}</strong><br>${esc(t.footSponsorPre)}<strong style="color:#C9A35E;">${esc(t.footSponsor)}</strong></p>
+    <p style="margin:0; font-size:12px; color:#6E6A57;">${esc(t.footContact)}</p>
+  </footer>`;
+}
+
+function setLang(l){ lang = l; render(); }
+
+function tickCountdown(){
+  const target = new Date('2026-07-15T17:30:00+09:00').getTime();
+  let diff = Math.max(0, target - Date.now());
+  const day = Math.floor(diff/86400000); diff -= day*86400000;
+  const hr  = Math.floor(diff/3600000); diff -= hr*3600000;
+  const mn  = Math.floor(diff/60000);  diff -= mn*60000;
+  const sc  = Math.floor(diff/1000);
+  const pad = n => String(n).padStart(2,'0');
+  const set = (id,v)=>{ const el=document.getElementById(id); if(el) el.textContent=v; };
+  set('cd-d', day); set('cd-h', pad(hr)); set('cd-m', pad(mn)); set('cd-s', pad(sc));
+}
+
+render();
+tickCountdown();
+setInterval(tickCountdown, 1000);
+</script>
+</body>
+</html>
