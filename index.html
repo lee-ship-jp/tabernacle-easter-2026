@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -152,14 +152,13 @@ const SHOW_VIDEO = true;
 const SHOW_GALLERY = true;
 const SHOW_COUNTDOWN = true;
 
-let lang = 'ko';
+let lang = 'en';
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const formHref = () => (FORM_URL && FORM_URL.trim()) ? FORM_URL : '#register';
 
 function render(){
   const t = T[lang];
   document.documentElement.lang = lang;
-  const fUrl = formHref();
   const koSty = "cursor:pointer; font-family:'Noto Sans KR'; font-size:12px; font-weight:700; letter-spacing:1px; padding:6px 16px; border:none; border-radius:999px; transition:all .18s; "
     + (lang==='ko' ? 'background:#F2C24E; color:#1A1A1A;' : 'background:transparent; color:#8E876E;');
   const enSty = "cursor:pointer; font-family:'Noto Sans KR'; font-size:12px; font-weight:700; letter-spacing:1px; padding:6px 16px; border:none; border-radius:999px; transition:all .18s; "
@@ -226,10 +225,9 @@ function render(){
     </div>
     <div style="display:flex; align-items:center; gap:9px;">
       <div style="display:flex; align-items:center; padding:3px; background:rgba(0,0,0,.35); border:1px solid rgba(183,147,90,.45); border-radius:999px;">
-        <button onclick="setLang('ko')" style="${koSty}">KO</button>
         <button onclick="setLang('en')" style="${enSty}">EN</button>
+        <button onclick="setLang('ko')" style="${koSty}">KO</button>
       </div>
-      <a href="${esc(fUrl)}" ${FORM_URL?'target="_blank" rel="noopener noreferrer"':''} style="font-family:'Noto Sans KR'; text-decoration:none; font-size:12.5px; font-weight:700; color:#0b0e1d; background:#B7935A; padding:9px 16px; border-radius:999px; letter-spacing:.5px;">${esc(t.navApply)}</a>
     </div>
   </div>
 
@@ -251,8 +249,7 @@ function render(){
       </div>
       ${countdown}
       <div style="margin:34px auto 0; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
-        <a href="${esc(fUrl)}" ${FORM_URL?'target="_blank" rel="noopener noreferrer"':''} style="text-decoration:none; font-size:14px; font-weight:700; color:#0b0e1d; background:#B7935A; padding:14px 30px; border-radius:999px; letter-spacing:.5px;">${esc(t.ctaApply)}</a>
-        <a href="#schedule" style="text-decoration:none; font-size:14px; font-weight:500; color:#E6DcC4; padding:14px 26px; border-radius:999px; letter-spacing:.5px; border:1px solid rgba(183,147,90,.4);">${esc(t.ctaSchedule)}</a>
+        <a href="#schedule" style="text-decoration:none; font-size:14px; font-weight:700; color:#0b0e1d; background:#B7935A; padding:14px 30px; border-radius:999px; letter-spacing:.5px;">${esc(t.ctaSchedule)}</a>
       </div>
     </div>
   </section>
@@ -354,21 +351,6 @@ function render(){
             <p style="margin:0; font-size:13px; color:#B8B097; line-height:1.6;">${esc(t.locTime)}</p>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- REGISTER -->
-  <section id="register" style="padding:62px 24px 70px; background:radial-gradient(120% 80% at 50% 0%, #20294e 0%, #131932 55%, #0b0e1d 100%); color:#EDE6D6;">
-    <div style="max-width:480px; margin:0 auto;">
-      <p style="margin:0 0 8px; text-align:center; font-size:11px; letter-spacing:4px; color:#B7935A; text-transform:uppercase;">${esc(t.kReg)}</p>
-      <h2 style="margin:0 0 8px; text-align:center; font-family:'Noto Serif KR',serif; font-weight:600; font-size:28px; color:#F6F0E2;">${esc(t.regTitle)}</h2>
-      <p style="margin:0 0 28px; text-align:center; font-size:13px; color:#B8B097; line-height:1.7;">${esc(t.regIntro)}</p>
-      <div style="padding:36px 26px; text-align:center; background:rgba(255,255,255,.035); border:1px solid rgba(183,147,90,.22); border-radius:12px;">
-        <div style="width:52px; height:52px; margin:0 auto 18px; border-radius:50%; background:rgba(183,147,90,.14); border:1px solid rgba(183,147,90,.4); display:flex; align-items:center; justify-content:center; font-size:24px;">✉️</div>
-        <p style="margin:0 0 22px; font-size:13.5px; color:#C2BAA0; line-height:1.8; white-space:pre-line;">${esc(t.regNote)}</p>
-        <a href="${esc(FORM_URL && FORM_URL.trim() ? FORM_URL : '#')}" ${FORM_URL?'target="_blank" rel="noopener noreferrer"':''} style="display:inline-block; text-decoration:none; font-family:'Noto Sans KR'; font-size:15px; font-weight:700; letter-spacing:.5px; color:#0b0e1d; background:#B7935A; border-radius:8px; padding:16px 38px;">${esc(t.regBtn)}</a>
-        <p style="margin:18px 0 0; font-size:11.5px; color:#8E876E;">${esc(t.regSub)}</p>
       </div>
     </div>
   </section>
