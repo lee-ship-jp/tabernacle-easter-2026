@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>식사 수령 확인 · 부활절 콘서트</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="images/morningdew-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="config.js"></script>
+<style>
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:'Noto Sans KR',sans-serif; background:#0b0e1d; color:#EDE6D6;
+    min-height:100vh; display:flex; flex-direction:column; align-items:center; }
+  .wrap{ width:100%; max-width:440px; padding:28px 22px 60px; }
+  .head{ text-align:center; padding:20px 0 8px; }
+  .head .kick{ font-size:11px; letter-spacing:4px; color:#B7935A; text-transform:uppercase; }
+  .head h1{ margin:6px 0 0; font-family:'Noto Serif KR',serif; font-weight:600; font-size:22px; color:#F6F0E2; }
+  .head .sub{ font-size:12px; color:#7E7860; margin-top:4px; letter-spacing:1px; }
+  .card{ margin-top:22px; border-radius:16px; padding:26px 22px; text-align:center;
+    background:rgba(255,255,255,.04); border:1px solid rgba(183,147,90,.25); }
+  .badge{ display:inline-block; padding:8px 18px; border-radius:999px; font-size:13px; font-weight:700; letter-spacing:.5px; }
+  .row{ display:flex; justify-content:space-between; gap:12px; padding:13px 4px; border-bottom:1px solid rgba(183,147,90,.16); }
+  .row:last-child{ border-bottom:none; }
+  .row .k{ font-size:13px; color:#9A916F; }
+  .row .v{ font-size:15px; font-weight:700; color:#F3ECDC; text-align:right; }
+  .big{ font-size:30px; }
+  button{ font-family:'Noto Sans KR'; cursor:pointer; border:none; border-radius:999px; }
+  .btn-primary{ width:100%; margin-top:22px; padding:18px; font-size:18px; font-weight:700; color:#0b0e1d; background:#3FB07A; }
+  .btn-primary:disabled{ opacity:.5; cursor:default; }
+  .btn-ghost{ display:inline-block; margin-top:18px; padding:13px 26px; font-size:14px; font-weight:600; color:#C2BAA0; background:transparent; border:1px solid rgba(183,147,90,.4); text-decoration:none; }
+  .state-ok{ color:#3FB07A; }
+  .state-warn{ color:#E6BCA0; }
+  .state-err{ color:#E07A5F; }
+  .muted{ font-size:12.5px; color:#7E7860; line-height:1.7; }
+  .spinner{ display:inline-block; width:30px; height:30px; border:3px solid rgba(183,147,90,.3); border-top-color:#B7935A; border-radius:50%; animation:spin .8s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div class="kick">Staff · 식사 수령 확인</div>
+    <h1>부활절 콘서트</h1>
+    <div class="sub">2026 · 07 · 15 · BEXCO</div>
+  </div>
+  <div id="content" class="card"><div class="spinner"></div></div>
+  <div style="text-align:center;"><a class="btn-ghost" href="checkin.html" id="next-btn" style="display:none;">다음 QR 확인</a></div>
+  <p class="muted" style="text-align:center; margin-top:26px;">※ 스태프 전용 화면입니다.<br>참가자의 QR을 스캔하면 이 화면이 열립니다.</p>
+</div>
+
+<script>
+var APPS_URL = (window.EVENT_CONFIG || {}).APPS_SCRIPT_URL || "";
+var APP_READY = /^https:\/\/script\.google\.com\//.test(APPS_URL);
+var content = document.getElementById('content');
+
+function param(name){
+  var m = new RegExp('[?&]'+name+'=([^&]+)').exec(location.search);
+  return m ? decodeURIComponent(m[1].replace(/\+/g,' ')) : '';
+}
+var ticket = param('t');
+
+function jsonp(params){
+  return new Promise(function(resolve, reject){
+    if (!APP_READY){ reject(new Error('no-config')); return; }
+    var cb = 'cb_' + Date.now() + '_' + Math.floor(Math.random()*1e6);
+    var qs = Object.keys(params).map(function(k){ return encodeURIComponent(k)+'='+encodeURIComponent(params[k]); }).join('&');
+    var s = document.createElement('script');
+    var done = false;
+    var timer = setTimeout(function(){ if(!done){ done=true; cleanup(); reject(new Error('timeout')); } }, 15000);
+    function cleanup(){ delete window[cb]; if(s.parentNode) s.parentNode.removeChild(s); }
+    window[cb] = function(data){ if(done) return; done=true; clearTimeout(timer); cleanup(); resolve(data); };
+    s.onerror = function(){ if(done) return; done=true; clearTimeout(timer); cleanup(); reject(new Error('network')); };
+    s.src = APPS_URL + '?callback=' + cb + '&' + qs;
+    document.body.appendChild(s);
+  });
+}
+
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+
+function showError(msg){
+  content.innerHTML = '<div class="badge state-err" style="background:rgba(224,122,95,.15);">확인 불가</div>'
+    + '<p class="muted" style="margin-top:16px;">'+esc(msg)+'</p>';
+  document.getElementById('next-btn').style.display = 'inline-block';
+}
+
+function infoRows(d){
+  return '<div style="margin-top:18px; text-align:left;">'
+    + '<div class="row"><span class="k">성함</span><span class="v">'+esc(d.name)+'</span></div>'
+    + '<div class="row"><span class="k">티켓</span><span class="v" style="letter-spacing:1px; color:#E9C98A;">'+esc(ticket)+'</span></div>'
+    + '<div class="row"><span class="k">식사 인원</span><span class="v big">'+esc(d.count)+'<span style="font-size:15px;">명</span></span></div>'
+    + '</div>';
+}
+
+function renderLookup(d){
+  if (d.checkedIn){
+    content.innerHTML = '<div class="badge state-warn" style="background:rgba(230,188,160,.15);">이미 수령함</div>'
+      + infoRows(d)
+      + '<p class="muted" style="margin-top:14px;">이미 식사를 수령한 티켓입니다.'+(d.at?'<br>('+esc(d.at)+')':'')+'</p>';
+    document.getElementById('next-btn').style.display = 'inline-block';
+    return;
+  }
+  content.innerHTML = '<div class="badge state-ok" style="background:rgba(63,176,122,.15);">신청 확인됨</div>'
+    + infoRows(d)
+    + '<button class="btn-primary" id="do-checkin">✅ 식사 수령 처리</button>';
+  document.getElementById('do-checkin').addEventListener('click', doCheckin);
+}
+
+function doCheckin(){
+  var btn = document.getElementById('do-checkin');
+  btn.disabled = true; btn.textContent = '처리 중…';
+  jsonp({ action:'checkin', t:ticket }).then(function(res){
+    if (res && res.ok){
+      var head = res.already
+        ? '<div class="badge state-warn" style="background:rgba(230,188,160,.15);">이미 수령함</div>'
+        : '<div class="badge state-ok" style="background:rgba(63,176,122,.18);">수령 완료 ✓</div>';
+      content.innerHTML = head
+        + infoRows({ name:res.name, count:res.count })
+        + '<p class="muted" style="margin-top:14px;">'
+          + (res.already ? '이전에 이미 수령 처리된 티켓입니다.' : '식사 '+esc(res.count)+'명분을 제공해 주세요.')
+          + (res.at?'<br>('+esc(res.at)+')':'') + '</p>';
+      document.getElementById('next-btn').style.display = 'inline-block';
+    } else {
+      showError((res && res.error) ? res.error : '처리에 실패했습니다.');
+    }
+  }).catch(function(){ showError('네트워크 오류입니다. 다시 시도해 주세요.'); });
+}
+
+function start(){
+  if (!APP_READY){ showError('신청 시스템이 아직 연결되지 않았습니다. (config.js 설정 필요)'); return; }
+  if (!ticket){ showError('티켓 정보가 없습니다. 참가자의 QR을 다시 스캔해 주세요.'); return; }
+  jsonp({ action:'lookup', t:ticket }).then(function(res){
+    if (res && res.ok){ renderLookup(res); }
+    else { showError('등록되지 않은 티켓입니다. ('+esc(ticket)+')'); }
+  }).catch(function(){ showError('네트워크 오류입니다. 다시 시도해 주세요.'); });
+}
+
+start();
+</script>
+</body>
+</html>

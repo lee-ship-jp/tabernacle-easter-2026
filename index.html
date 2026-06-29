@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>성막전시회 & 부활절 콘서트 · 2026.7.15 BEXCO</title>
-<meta name="description" content="성막 전시회 그리고 부활절 콘서트 〈Were You There〉 — 2026년 7월 15일 (수) 오후 5시 30분, 부산 벡스코(BEXCO). 크리스천 리더스 펠로십 주최.">
-<meta property="og:title" content="성막전시회 & 부활절 콘서트">
-<meta property="og:description" content="2026.7.15 (수) 오후 5:30 · 부산 벡스코(BEXCO) · 무료 입장">
+<title>부활절 콘서트 〈Were You There〉 · 2026.7.15 BEXCO</title>
+<meta name="description" content="부활절 콘서트 〈Were You There〉 — 2026년 7월 15일 (수) 오후 5시 30분, 부산 벡스코(BEXCO). 크리스천 리더스 펠로십 주최. 참가 신청 시 저녁 식사 무료 제공.">
+<meta property="og:title" content="부활절 콘서트 〈Were You There〉">
+<meta property="og:description" content="2026.7.15 (수) 오후 5:30 · 부산 벡스코(BEXCO) · 무료 입장 · 저녁 식사 제공">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://lee-ship-jp.github.io/tabernacle-easter-2026/">
 <meta property="og:image" content="https://lee-ship-jp.github.io/tabernacle-easter-2026/images/share.png">
@@ -22,6 +22,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+<script src="config.js"></script>
 <style>
   *{ box-sizing:border-box; }
   html{ scroll-behavior:smooth; }
@@ -31,11 +33,11 @@
   @keyframes fadeUp2{ from{ opacity:0; transform:translateY(14px);} to{ opacity:1; transform:translateY(0);} }
   .scrollx::-webkit-scrollbar{ height:6px; }
   .scrollx::-webkit-scrollbar-thumb{ background:rgba(183,147,90,.4); border-radius:4px; }
-  .slot{ display:flex; align-items:center; justify-content:center; text-align:center; padding:10px;
-    background:linear-gradient(135deg, rgba(183,147,90,.10), rgba(183,147,90,.03));
-    border:1px dashed rgba(183,147,90,.35); color:#9A8D6C; font-size:12.5px; letter-spacing:.5px;
-    font-family:'Noto Serif KR',serif; }
   a{ -webkit-tap-highlight-color: transparent; }
+  .reg-input{ width:100%; padding:13px 14px; margin-top:6px; font-family:'Noto Sans KR',sans-serif; font-size:15px;
+    color:#F3ECDC; background:rgba(255,255,255,.06); border:1px solid rgba(183,147,90,.35); border-radius:8px; outline:none; transition:border-color .18s; }
+  .reg-input:focus{ border-color:#C9A35E; }
+  .reg-input::placeholder{ color:#7E7860; }
 </style>
 </head>
 <body>
@@ -44,81 +46,96 @@
 
 <script>
 /* ============================================================
-   성막전시회 & 부활절 콘서트 — 단독 정적 사이트
-   (Claude Design .dc.html 을 런타임 없이 동작하도록 변환)
+   부활절 콘서트 — 단독 정적 사이트 + 참가 신청/QR 발급
    ============================================================ */
 
-/* 구글폼 등 신청 링크가 생기면 아래에 넣으세요.
-   비워두면 모든 신청 버튼이 페이지 하단 신청 안내로 스크롤됩니다. */
-const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScZ5tme3Vzve4TKmFhy68LRUidxZun_R_6Pdp7v9LMu2L5ejg/viewform";
+/* 신청 처리용 Google Apps Script 웹 앱 URL은 config.js 에서 설정합니다. */
+const APPS_URL = (window.EVENT_CONFIG || {}).APPS_SCRIPT_URL || "";
+const APP_READY = /^https:\/\/script\.google\.com\//.test(APPS_URL);
 
 const T = {
   ko: {
-    brand:'성막전시회 & 부활절 콘서트', navApply:'참가 신청',
+    brand:'부활절 콘서트', navApply:'참가 신청',
     heroKicker:'크리스천 리더스 펠로십 주최',
-    heroLine1:'성막 전시회', heroLine2:'그리고', heroLine3:'부활절 콘서트',
+    heroTitle:'부활절 콘서트',
     heroDateBig:'2026. 7. 15 水', heroDateSub:'오후 5시 30분 · 부산 벡스코(BEXCO)',
     ctaApply:'참가 신청하기', ctaSchedule:'행사 일정 보기',
-    schedTitle:'행사 일정', schedIntro:'전시회 관람으로 시작해 따뜻한 식사를 나누고, 부활절 콘서트의 감동으로 마무리합니다.',
-    tabTitle:'성막 전시회',
-    tabBody:'성막(聖幕)은 하나님께서 모세에게 보여주신 하늘 성소의 모형입니다. 출애굽기의 말씀대로 정교히 재현된 성막을 거닐며, 번제단에서 지성소까지 이어지는 구원의 길을 눈으로 보고 마음으로 만나는 시간입니다.',
-    tabSlot1:'헤롯 성전(제2성전) 모형', tabSlot2:'전시 사진',
-    tabCard1Label:'관람 시간', tabCard1Val:'오후 5:30 ~ 6:00',
-    tabCard2Label:'관람료', tabCard2Val:'무료 · 누구나 환영',
+    schedTitle:'행사 일정', schedIntro:'따뜻한 저녁 식사를 함께 나누고, 부활절 콘서트의 감동으로 하루를 마무리합니다.',
     mealTitle:'함께 나누는 저녁 식사', mealBadge:'전원 무료 제공',
     concTitle:'부활절 콘서트',
     progTitle:'프로그램',
     locTitle:'오시는 길', locVenue:'부산 벡스코 (BEXCO)',
     locAddr:'부산광역시 해운대구 APEC로 55', locAddrNote:'상세 전시홀·주차 안내는 추후 공지',
     locDate:'2026년 7월 15일 (수)', locTime:'오후 5시 30분 입장 · 6시 30분 콘서트 시작',
-    regTitle:'참가 신청', regIntro:'식사 준비를 위해 미리 신청해 주세요. 참가비는 없습니다.',
-    regNote:'참가 신청은 구글폼으로 받습니다.\n아래 버튼을 눌러 신청서를 작성해 주세요.', regBtn:'신청서 작성하기 (구글폼)', regSub:'식사 준비를 위해 미리 신청해 주세요 · 참가비 무료',
-    furnTitle:'성막의 기구들',
+    // 참가 신청
+    regKicker:'Registration',
+    regTitle:'참가 신청', regLead:'저녁 식사 준비를 위해 미리 신청해 주세요. 신청하시면 개인 QR이 발급되며, 행사 당일 현장에서 제시하시면 저녁 식사를 받으실 수 있습니다.',
+    fldName:'성함', fldNamePh:'홍길동',
+    fldPhone:'연락처', fldPhonePh:'010-0000-0000',
+    fldOrg:'소속 (교회·단체 · 선택)', fldOrgPh:'○○교회',
+    fldCount:'참석 인원',
+    regSubmit:'신청하고 QR 받기', regBusy:'발급 중…', regFree:'참가비 무료',
+    ticketKicker:'Your Ticket',
+    ticketTitle:'신청이 완료되었습니다',
+    ticketGuide:'아래 QR을 캡처하거나 이미지로 저장해 두세요. 행사 당일 저녁 식사 시 이 QR을 제시하시면 됩니다.',
+    ticketName:'성함', ticketNo:'티켓 번호', ticketCount:'인원', ticketUnit:'명',
+    ticketSave:'QR 이미지 저장', ticketNew:'새로 신청하기',
+    regNoConfig:'신청 시스템이 아직 준비 중입니다. 잠시 후 다시 시도해 주세요.',
+    regErr:'신청 처리 중 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.',
+    regNeedName:'성함과 연락처를 입력해 주세요.',
     footDate:'2026. 7. 15 (수) · 부산 벡스코', footHostPre:'주최 ', footHost:'크리스천 리더스 펠로십',
     footSponsorPre:'후원 ', footSponsor:'모닝듀워십',
     footContact:'문의 안내는 추후 공지됩니다',
     cdDays:'DAYS', cdHrs:'HRS', cdMin:'MIN', cdSec:'SEC',
-    kProgram:'Program of the Day', kExhibit:'Exhibition · 17:30', kDinner:'Dinner · 18:00',
+    kProgram:'Program of the Day', kDinner:'Dinner · 18:00',
     kConcert:'Easter Concert · 18:30', kVenue:'Venue', kReg:'Registration'
   },
   en: {
-    brand:'Tabernacle Exhibition & Easter Concert', navApply:'Register',
+    brand:'Easter Concert', navApply:'Register',
     heroKicker:'Hosted by Christian Leaders Fellowship',
-    heroLine1:'Tabernacle', heroLine2:'&', heroLine3:'Easter Concert',
+    heroTitle:'Easter Concert',
     heroDateBig:'Wed · July 15, 2026', heroDateSub:'5:30 PM · BEXCO, Busan',
     ctaApply:'Register Now', ctaSchedule:'View Schedule',
-    schedTitle:'Schedule', schedIntro:'We begin with the exhibition, share a warm dinner together, and close with the moving Easter concert.',
-    tabTitle:'Tabernacle Exhibition',
-    tabBody:'The Tabernacle is the model of the heavenly sanctuary that God showed Moses. Walk through a faithful recreation built according to the book of Exodus, and trace the way of salvation from the bronze altar to the Most Holy Place — seen with your eyes and met in your heart.',
-    tabSlot1:'Herod’s Temple (Second Temple) — model', tabSlot2:'Exhibition photo',
-    tabCard1Label:'Viewing', tabCard1Val:'5:30 – 6:00 PM',
-    tabCard2Label:'Admission', tabCard2Val:'Free · All welcome',
+    schedTitle:'Schedule', schedIntro:'Share a warm dinner together and close the day with the moving Easter concert.',
     mealTitle:'Dinner Together', mealBadge:'Free for everyone',
     concTitle:'Easter Concert',
     progTitle:'Program',
     locTitle:'Location', locVenue:'BEXCO, Busan',
     locAddr:'55 APEC-ro, Haeundae-gu, Busan', locAddrNote:'Hall & parking details to be announced',
     locDate:'Wednesday, July 15, 2026', locTime:'Doors 5:30 PM · Concert begins 6:30 PM',
-    regTitle:'Register', regIntro:'Please register in advance so we can prepare the meal. Admission is free.',
-    regNote:'Registration is handled through a Google Form.\nTap the button below to fill out the form.', regBtn:'Open Registration Form', regSub:'Please register early so we can prepare the meal · Free admission',
-    furnTitle:'Furnishings of the Tabernacle',
+    // Registration
+    regKicker:'Registration',
+    regTitle:'Register', regLead:'Please register in advance so we can prepare the meal. A personal QR code will be issued — show it on site to receive your dinner.',
+    fldName:'Name', fldNamePh:'Your name',
+    fldPhone:'Phone', fldPhonePh:'010-0000-0000',
+    fldOrg:'Organization (church/group · optional)', fldOrgPh:'Your church',
+    fldCount:'Guests',
+    regSubmit:'Register & Get QR', regBusy:'Issuing…', regFree:'Free admission',
+    ticketKicker:'Your Ticket',
+    ticketTitle:'Registration complete',
+    ticketGuide:'Save or screenshot the QR code below. Show it at the dinner on the day of the event.',
+    ticketName:'Name', ticketNo:'Ticket', ticketCount:'Guests', ticketUnit:'',
+    ticketSave:'Save QR image', ticketNew:'New registration',
+    regNoConfig:'The registration system is being set up. Please try again shortly.',
+    regErr:'Something went wrong. Please try again in a moment.',
+    regNeedName:'Please enter your name and phone number.',
     footDate:'Wed, July 15, 2026 · BEXCO, Busan', footHostPre:'Hosted by ', footHost:'Christian Leaders Fellowship',
     footSponsorPre:'Sponsored by ', footSponsor:'Morning Dew Worship',
     footContact:'Contact details to be announced',
     cdDays:'DAYS', cdHrs:'HRS', cdMin:'MIN', cdSec:'SEC',
-    kProgram:'Program of the Day', kExhibit:'Exhibition · 17:30', kDinner:'Dinner · 18:00',
+    kProgram:'Program of the Day', kDinner:'Dinner · 18:00',
     kConcert:'Easter Concert · 18:30', kVenue:'Venue', kReg:'Registration'
   }
 };
 const SCHED = {
   ko:[
-    { time:'17:30', title:'성막 전시회 관람', desc:'하나님의 임재의 모형, 성막을 거닐며 묵상합니다.', tag:'' },
-    { time:'18:00', title:'저녁 식사', desc:'정성껏 준비한 식사를 함께 나눕니다.', tag:'무료 제공' },
+    { time:'17:30', title:'입장 · 접수', desc:'행사장 입장 및 참가 접수.', tag:'' },
+    { time:'18:00', title:'저녁 식사', desc:'정성껏 준비한 식사를 함께 나눕니다. (신청 QR 제시)', tag:'무료 제공' },
     { time:'18:30', title:'부활절 콘서트 〈Were You There〉', desc:'그라시아스 합창단·오케스트라의 부활의 울림.', tag:'' }
   ],
   en:[
-    { time:'5:30', title:'Tabernacle Exhibition', desc:'Walk through the tabernacle, a model of God’s presence.', tag:'' },
-    { time:'6:00', title:'Dinner', desc:'Share a meal prepared with care.', tag:'Free' },
+    { time:'5:30', title:'Doors & Check-in', desc:'Entrance and registration check-in.', tag:'' },
+    { time:'6:00', title:'Dinner', desc:'Share a meal prepared with care. (Show your QR)', tag:'Free' },
     { time:'6:30', title:'Easter Concert 〈Were You There〉', desc:'Resurrection echoes of Gracias Choir & Orchestra.', tag:'' }
   ]
 };
@@ -137,8 +154,8 @@ const PROG = {
   ]
 };
 const MEAL_BODY = {
-  ko:'전시회 관람 후, 정성껏 준비한 저녁 식사를 무료로 제공합니다. 식탁의 교제 가운데 마음을 나눠 주세요.',
-  en:'After the exhibition, a dinner prepared with care is provided free of charge. Please share in the fellowship of the table.'
+  ko:'정성껏 준비한 저녁 식사를 무료로 제공합니다. 참가 신청 시 발급되는 개인 QR을 현장에서 제시하시면 식사를 받으실 수 있습니다.',
+  en:'A dinner prepared with care is provided free of charge. Show the personal QR issued at registration to receive your meal on site.'
 };
 const CONC_BODY = {
   ko:'부활절 콘서트 〈Were You There〉는 성경 속 예수 그리스도의 고난과 부활의 기록을 무대 위에 그대로 그려냅니다. 그라시아스 합창단과 오케스트라가 빚어내는 깊은 울림은 부활의 진정한 의미와 그 기쁨을 새롭게 일깨워 줍니다.',
@@ -148,24 +165,94 @@ const CONC_CALL = {
   ko:'이 콘서트는 2021년 영화 〈Were You There〉로 제작되어, 미국 FOX TV를 비롯해 세계 각국 257개 방송사를 통해 전 세계에 방영되었습니다.',
   en:'In 2021 this concert was produced as the film 〈Were You There〉 and broadcast worldwide through 257 networks, including FOX TV in the United States.'
 };
-const FURN = [
-  { ko:'번제단', en:'Altar of Burnt Offering', img:'images/altar.jpg' },
-  { ko:'물두멍', en:'Bronze Laver', img:'images/laver.jpg' },
-  { ko:'진설병 상', en:'Table of Showbread', img:'images/showbread.jpg' },
-  { ko:'분향단', en:'Altar of Incense', img:'images/incense.jpg' },
-  { ko:'언약궤', en:'Ark of the Covenant', img:'images/ark.jpg' },
-  { ko:'성소', en:'The Holy Place', img:'images/holyplace.jpg' },
-  { ko:'어린 양', en:'The Lamb', img:'images/lamb.jpg' }
-];
-const TAB_MAIN = 'images/tabernacle.jpg';
 
 const SHOW_VIDEO = true;
 const SHOW_GALLERY = true;
 const SHOW_COUNTDOWN = true;
 
 let lang = 'en';
+let issuedTicket = null;      // { ticket, name, count }
+let submitting = false;
+
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const formHref = () => (FORM_URL && FORM_URL.trim()) ? FORM_URL : '#register';
+
+/* ---- JSONP (Apps Script 웹 앱은 CORS를 막으므로 JSONP로 호출) ---- */
+function jsonp(params, timeoutMs){
+  return new Promise((resolve, reject) => {
+    if (!APP_READY) { reject(new Error('no-config')); return; }
+    const cb = 'cb_' + Date.now() + '_' + Math.floor(Math.random()*1e6);
+    const qs = Object.keys(params).map(k => encodeURIComponent(k)+'='+encodeURIComponent(params[k])).join('&');
+    const s = document.createElement('script');
+    let done = false;
+    const cleanup = () => { delete window[cb]; if (s.parentNode) s.parentNode.removeChild(s); };
+    const timer = setTimeout(() => { if(!done){ done=true; cleanup(); reject(new Error('timeout')); } }, timeoutMs || 15000);
+    window[cb] = (data) => { if(done) return; done=true; clearTimeout(timer); cleanup(); resolve(data); };
+    s.onerror = () => { if(done) return; done=true; clearTimeout(timer); cleanup(); reject(new Error('network')); };
+    s.src = APPS_URL + '?callback=' + cb + '&' + qs;
+    document.body.appendChild(s);
+  });
+}
+
+function regSectionInner(t){
+  if (issuedTicket){
+    return `
+    <div style="max-width:430px; margin:0 auto; text-align:center; animation:fadeUp2 .4s ease both;">
+      <p style="margin:0 0 8px; font-size:11px; letter-spacing:4px; color:#B7935A; text-transform:uppercase;">${esc(t.ticketKicker)}</p>
+      <h2 style="margin:0 0 10px; font-family:'Noto Serif KR',serif; font-weight:600; font-size:26px; color:#F6F0E2;">${esc(t.ticketTitle)}</h2>
+      <p style="margin:0 auto 24px; font-size:13.5px; line-height:1.8; color:#C2BAA0; max-width:380px;">${esc(t.ticketGuide)}</p>
+      <div style="display:inline-block; padding:20px; background:#ffffff; border-radius:16px; box-shadow:0 14px 36px rgba(0,0,0,.45);">
+        <canvas id="qr-canvas" width="240" height="240" style="display:block; width:240px; height:240px;"></canvas>
+      </div>
+      <div style="margin:22px auto 0; max-width:320px; display:flex; flex-direction:column; gap:0; border:1px solid rgba(183,147,90,.25); border-radius:10px; overflow:hidden; background:rgba(255,255,255,.03);">
+        <div style="display:flex; justify-content:space-between; padding:12px 16px; border-bottom:1px solid rgba(183,147,90,.16);">
+          <span style="font-size:12.5px; color:#9A916F;">${esc(t.ticketName)}</span>
+          <span style="font-size:13.5px; font-weight:700; color:#F3ECDC;">${esc(issuedTicket.name)}</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; padding:12px 16px; border-bottom:1px solid rgba(183,147,90,.16);">
+          <span style="font-size:12.5px; color:#9A916F;">${esc(t.ticketNo)}</span>
+          <span style="font-size:13.5px; font-weight:700; letter-spacing:1px; color:#E9C98A;">${esc(issuedTicket.ticket)}</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; padding:12px 16px;">
+          <span style="font-size:12.5px; color:#9A916F;">${esc(t.ticketCount)}</span>
+          <span style="font-size:13.5px; font-weight:700; color:#F3ECDC;">${esc(issuedTicket.count)}${esc(t.ticketUnit)}</span>
+        </div>
+      </div>
+      <div style="margin:22px auto 0; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+        <button onclick="downloadQR()" style="cursor:pointer; font-family:'Noto Sans KR'; font-size:13.5px; font-weight:700; color:#0b0e1d; background:#B7935A; border:none; padding:13px 24px; border-radius:999px;">${esc(t.ticketSave)}</button>
+        <button onclick="resetReg()" style="cursor:pointer; font-family:'Noto Sans KR'; font-size:13.5px; font-weight:600; color:#C2BAA0; background:transparent; border:1px solid rgba(183,147,90,.4); padding:13px 24px; border-radius:999px;">${esc(t.ticketNew)}</button>
+      </div>
+    </div>`;
+  }
+  const notice = APP_READY ? '' : `
+    <p style="margin:14px 0 0; text-align:center; font-size:12.5px; color:#E6BCA0;">⚠ ${esc(t.regNoConfig)}</p>`;
+  return `
+    <div style="max-width:440px; margin:0 auto;">
+      <p style="margin:0 0 8px; text-align:center; font-size:11px; letter-spacing:4px; color:#B7935A; text-transform:uppercase;">${esc(t.regKicker)}</p>
+      <h2 style="margin:0 0 12px; text-align:center; font-family:'Noto Serif KR',serif; font-weight:600; font-size:28px; color:#F6F0E2;">${esc(t.regTitle)}</h2>
+      <p style="margin:0 auto 28px; text-align:center; font-size:13.5px; line-height:1.85; color:#C2BAA0; max-width:400px;">${esc(t.regLead)}</p>
+      <form onsubmit="submitReg(event)" autocomplete="on">
+        <label style="display:block; margin-bottom:14px;">
+          <span style="font-size:12.5px; font-weight:600; color:#E9C98A; letter-spacing:.3px;">${esc(t.fldName)} <span style="color:#E07A5F;">*</span></span>
+          <input id="reg-name" class="reg-input" type="text" required placeholder="${esc(t.fldNamePh)}" maxlength="40">
+        </label>
+        <label style="display:block; margin-bottom:14px;">
+          <span style="font-size:12.5px; font-weight:600; color:#E9C98A; letter-spacing:.3px;">${esc(t.fldPhone)} <span style="color:#E07A5F;">*</span></span>
+          <input id="reg-phone" class="reg-input" type="tel" required placeholder="${esc(t.fldPhonePh)}" maxlength="30">
+        </label>
+        <label style="display:block; margin-bottom:14px;">
+          <span style="font-size:12.5px; font-weight:600; color:#E9C98A; letter-spacing:.3px;">${esc(t.fldOrg)}</span>
+          <input id="reg-org" class="reg-input" type="text" placeholder="${esc(t.fldOrgPh)}" maxlength="60">
+        </label>
+        <label style="display:block; margin-bottom:22px;">
+          <span style="font-size:12.5px; font-weight:600; color:#E9C98A; letter-spacing:.3px;">${esc(t.fldCount)}</span>
+          <input id="reg-count" class="reg-input" type="number" min="1" max="50" value="1" inputmode="numeric">
+        </label>
+        <button id="reg-btn" type="submit" style="width:100%; cursor:pointer; font-family:'Noto Sans KR'; font-size:15px; font-weight:700; letter-spacing:.5px; color:#0b0e1d; background:#B7935A; border:none; padding:15px; border-radius:999px;">${esc(t.regSubmit)}</button>
+        <p style="margin:12px 0 0; text-align:center; font-size:12px; color:#9A916F;">${esc(t.regFree)}</p>
+      </form>
+      ${notice}
+    </div>`;
+}
 
 function render(){
   const t = T[lang];
@@ -189,18 +276,6 @@ function render(){
         <p style="margin:5px 0 0; font-size:13px; color:#6B6657; line-height:1.6;">${esc(item.desc)}</p>
       </div>
     </div>`).join('');
-
-  const furniture = FURN.map(x => {
-    const name = x[lang]; const en = lang==='ko' ? x.en : x.ko;
-    return `
-    <div style="display:flex; flex-direction:column; gap:9px;">
-      <img src="${esc(x.img)}" alt="${esc(name)}" loading="lazy" style="width:100%; height:140px; object-fit:cover; border-radius:6px; display:block; box-shadow:0 6px 16px rgba(0,0,0,.30);">
-      <div style="text-align:center;">
-        <p style="margin:0; font-family:'Noto Serif KR'; font-size:14px; font-weight:600; color:#F0E6CF;">${esc(name)}</p>
-        <p style="margin:2px 0 0; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:13px; color:#9A8D6C;">${esc(en)}</p>
-      </div>
-    </div>`;
-  }).join('');
 
   const program = PROG[lang].map(p => `
     <div style="display:flex; align-items:baseline; justify-content:space-between; gap:14px; padding:11px 4px; border-bottom:1px solid #EAE0CB;">
@@ -235,6 +310,7 @@ function render(){
       <span style="font-size:10.5px; letter-spacing:2px; color:#B7935A; text-transform:uppercase;">2026 · 07 · 15</span>
     </div>
     <div style="display:flex; align-items:center; gap:9px;">
+      <a href="#register" style="text-decoration:none; font-family:'Noto Sans KR'; font-size:11.5px; font-weight:700; letter-spacing:.5px; color:#0b0e1d; background:#B7935A; padding:8px 14px; border-radius:999px;">${esc(t.navApply)}</a>
       <div style="display:flex; align-items:center; padding:3px; background:rgba(0,0,0,.35); border:1px solid rgba(183,147,90,.45); border-radius:999px;">
         <button onclick="setLang('en')" style="${enSty}">EN</button>
         <button onclick="setLang('ko')" style="${koSty}">KO</button>
@@ -252,7 +328,7 @@ function render(){
         <span style="width:6px; height:6px; background:#B7935A; transform:rotate(45deg);"></span>
         <span style="flex:1; height:1px; background:linear-gradient(90deg,rgba(183,147,90,.55),transparent);"></span>
       </div>
-      <h1 style="margin:0; font-family:'Noto Serif KR',serif; font-weight:600; font-size:40px; line-height:1.28; color:#F6F0E2; letter-spacing:-.5px;">${esc(t.heroLine1)}<br><span style="font-weight:300; font-size:34px; color:#E6DcC4;">${esc(t.heroLine2)}</span><br>${esc(t.heroLine3)}</h1>
+      <h1 style="margin:0; font-family:'Noto Serif KR',serif; font-weight:600; font-size:42px; line-height:1.25; color:#F6F0E2; letter-spacing:-.5px;">${esc(t.heroTitle)}</h1>
       <p style="margin:18px 0 0; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:22px; color:#C9A35E; letter-spacing:.5px;">&ldquo;Were You There&rdquo;</p>
       <div style="margin:34px auto 0; display:inline-flex; flex-direction:column; gap:7px; padding:18px 30px; border:1px solid rgba(183,147,90,.30); border-radius:4px; background:rgba(255,255,255,.02);">
         <span style="font-family:'Noto Serif KR',serif; font-size:19px; color:#F3ECDC; letter-spacing:.5px;">${esc(t.heroDateBig)}</span>
@@ -260,7 +336,8 @@ function render(){
       </div>
       ${countdown}
       <div style="margin:34px auto 0; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
-        <a href="#schedule" style="text-decoration:none; font-size:14px; font-weight:700; color:#0b0e1d; background:#B7935A; padding:14px 30px; border-radius:999px; letter-spacing:.5px;">${esc(t.ctaSchedule)}</a>
+        <a href="#register" style="text-decoration:none; font-size:14px; font-weight:700; color:#0b0e1d; background:#B7935A; padding:14px 30px; border-radius:999px; letter-spacing:.5px;">${esc(t.ctaApply)}</a>
+        <a href="#schedule" style="text-decoration:none; font-size:14px; font-weight:600; color:#E6DcC4; background:transparent; border:1px solid rgba(183,147,90,.5); padding:14px 28px; border-radius:999px; letter-spacing:.5px;">${esc(t.ctaSchedule)}</a>
       </div>
     </div>
   </section>
@@ -278,37 +355,8 @@ function render(){
     </div>
   </section>
 
-  <!-- TABERNACLE -->
-  <section style="padding:62px 24px; background:radial-gradient(120% 70% at 50% 0%, #1a2140 0%, #0e1226 60%, #0b0e1d 100%); color:#EDE6D6;">
-    <div style="max-width:560px; margin:0 auto;">
-      <p style="margin:0 0 8px; text-align:center; font-size:11px; letter-spacing:4px; color:#B7935A; text-transform:uppercase;">${esc(t.kExhibit)}</p>
-      <h2 style="margin:0 0 18px; text-align:center; font-family:'Noto Serif KR',serif; font-weight:600; font-size:28px; color:#F6F0E2;">${esc(t.tabTitle)}</h2>
-      <p style="margin:0 auto 26px; text-align:center; font-size:14px; line-height:1.95; color:#CFC6AE; max-width:470px;">${esc(t.tabBody)}</p>
-      <img src="${TAB_MAIN}" alt="${esc(t.tabSlot1)}" style="width:100%; height:300px; object-fit:cover; border-radius:6px; display:block; box-shadow:0 14px 34px rgba(0,0,0,.45);">
-      <p style="margin:9px 0 0; text-align:center; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:13px; color:#9A8D6C;">${esc(t.tabSlot1)}</p>
-      <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin:34px auto 22px; max-width:280px;">
-        <span style="flex:1; height:1px; background:rgba(183,147,90,.4);"></span>
-        <span style="font-size:11px; letter-spacing:3px; color:#B7935A; text-transform:uppercase; white-space:nowrap;">${esc(t.furnTitle)}</span>
-        <span style="flex:1; height:1px; background:rgba(183,147,90,.4);"></span>
-      </div>
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
-        ${furniture}
-      </div>
-      <div style="margin:30px 0 0; display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-        <div style="padding:18px 18px; border:1px solid rgba(183,147,90,.25); border-radius:6px; background:rgba(255,255,255,.02);">
-          <p style="margin:0 0 4px; font-family:'Noto Serif KR'; font-size:14px; font-weight:600; color:#E9C98A;">${esc(t.tabCard1Label)}</p>
-          <p style="margin:0; font-size:13px; color:#C2BAA0;">${esc(t.tabCard1Val)}</p>
-        </div>
-        <div style="padding:18px 18px; border:1px solid rgba(183,147,90,.25); border-radius:6px; background:rgba(255,255,255,.02);">
-          <p style="margin:0 0 4px; font-family:'Noto Serif KR'; font-size:14px; font-weight:600; color:#E9C98A;">${esc(t.tabCard2Label)}</p>
-          <p style="margin:0; font-size:13px; color:#C2BAA0;">${esc(t.tabCard2Val)}</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- MEAL -->
-  <section style="padding:40px 24px; background:#6E2433; color:#F6EFE4; text-align:center;">
+  <section style="padding:48px 24px; background:#6E2433; color:#F6EFE4; text-align:center;">
     <div style="max-width:520px; margin:0 auto;">
       <p style="margin:0 0 6px; font-size:11px; letter-spacing:4px; color:#E6BCA0; text-transform:uppercase;">${esc(t.kDinner)}</p>
       <h3 style="margin:0 0 10px; font-family:'Noto Serif KR'; font-weight:600; font-size:23px; color:#FBF3E6;">${esc(t.mealTitle)}</h3>
@@ -340,6 +388,11 @@ function render(){
         ${program}
       </div>
     </div>
+  </section>
+
+  <!-- REGISTER -->
+  <section id="register" style="padding:62px 24px; background:radial-gradient(120% 80% at 50% 0%, #1a2140 0%, #0e1226 60%, #0b0e1d 100%); color:#EDE6D6;">
+    ${regSectionInner(t)}
   </section>
 
   <!-- LOCATION -->
@@ -381,9 +434,96 @@ function render(){
     </div>
     <p style="margin:0; font-size:12px; color:#6E6A57;">${esc(t.footContact)}</p>
   </footer>`;
+
+  if (issuedTicket) drawQR();
 }
 
 function setLang(l){ lang = l; render(); }
+
+async function submitReg(ev){
+  ev.preventDefault();
+  if (submitting) return;
+  const t = T[lang];
+  const name = (document.getElementById('reg-name').value || '').trim();
+  const phone = (document.getElementById('reg-phone').value || '').trim();
+  const org = (document.getElementById('reg-org').value || '').trim();
+  let count = parseInt(document.getElementById('reg-count').value, 10);
+  if (!count || count < 1) count = 1;
+  if (!name || !phone){ alert(t.regNeedName); return; }
+  if (!APP_READY){ alert(t.regNoConfig); return; }
+
+  const btn = document.getElementById('reg-btn');
+  submitting = true;
+  if (btn){ btn.disabled = true; btn.style.opacity = '.6'; btn.textContent = t.regBusy; }
+  try {
+    const res = await jsonp({ action:'register', name, phone, org, count });
+    if (res && res.ok){
+      issuedTicket = { ticket: res.ticket, name: res.name || name, count: res.count || count };
+      render();
+      const sec = document.getElementById('register');
+      if (sec) sec.scrollIntoView({ behavior:'smooth', block:'start' });
+    } else {
+      alert(t.regErr);
+      if (btn){ btn.disabled = false; btn.style.opacity = '1'; btn.textContent = t.regSubmit; }
+    }
+  } catch(e){
+    alert(t.regErr);
+    if (btn){ btn.disabled = false; btn.style.opacity = '1'; btn.textContent = t.regSubmit; }
+  } finally {
+    submitting = false;
+  }
+}
+
+function qrPayload(){
+  const u = new URL('checkin.html', location.href);
+  u.searchParams.set('t', issuedTicket.ticket);
+  return u.href;
+}
+
+function drawQR(){
+  const c = document.getElementById('qr-canvas');
+  if (!c || !issuedTicket) return;
+  if (typeof window.qrcode === 'undefined'){ setTimeout(drawQR, 250); return; }
+  try {
+    const qr = qrcode(0, 'M');          // 0 = 자동 타입, 'M' = 오류복원 중간
+    qr.addData(qrPayload());
+    qr.make();
+    const count = qr.getModuleCount();
+    const quiet = 4;                     // 여백(모듈 단위)
+    const total = count + quiet * 2;
+    const cell = Math.max(4, Math.floor(720 / total));  // 고해상도(≈720px)로 렌더 → 인쇄/캡처 선명
+    const dim = cell * total;
+    c.width = dim; c.height = dim;
+    c.style.width = '240px'; c.style.height = '240px';
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, dim, dim);
+    ctx.fillStyle = '#0b0e1d';
+    for (let r = 0; r < count; r++){
+      for (let col = 0; col < count; col++){
+        if (qr.isDark(r, col)) ctx.fillRect((col + quiet) * cell, (r + quiet) * cell, cell, cell);
+      }
+    }
+  } catch(e){ console.error(e); }
+}
+
+function downloadQR(){
+  const c = document.getElementById('qr-canvas');
+  if (!c || !issuedTicket) return;
+  try {
+    const a = document.createElement('a');
+    a.href = c.toDataURL('image/png');
+    a.download = 'easter-ticket-' + issuedTicket.ticket + '.png';
+    document.body.appendChild(a); a.click(); a.remove();
+  } catch(e){ alert('QR 이미지를 길게 눌러 저장해 주세요. / Long-press the QR to save.'); }
+}
+
+function resetReg(){
+  issuedTicket = null;
+  submitting = false;
+  render();
+  const sec = document.getElementById('register');
+  if (sec) sec.scrollIntoView({ behavior:'smooth', block:'start' });
+}
 
 function tickCountdown(){
   const target = new Date('2026-07-15T17:30:00+09:00').getTime();
