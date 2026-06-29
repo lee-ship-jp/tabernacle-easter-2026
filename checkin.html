@@ -89,7 +89,7 @@ function showError(msg){
 function infoRows(d){
   var isGroup = (d.type === '단체') || (!!d.org && Number(d.count) > 1);
   var who = isGroup
-    ? '<div class="row"><span class="k">단체명</span><span class="v">'+esc(d.org||'')+'</span></div>'
+    ? '<div class="row"><span class="k">나라</span><span class="v">'+esc(d.org||'')+'</span></div>'
       + '<div class="row"><span class="k">대표자</span><span class="v">'+esc(d.name)+'</span></div>'
     : '<div class="row"><span class="k">성함</span><span class="v">'+esc(d.name)+'</span></div>';
   return '<div style="margin-top:18px; text-align:left;">'

@@ -52,7 +52,7 @@ function getSheet(){
   var sh = ss.getSheetByName(SHEET_NAME);
   if (!sh){
     sh = ss.insertSheet(SHEET_NAME);
-    sh.appendRow(['신청시각','티켓번호','신청유형','성함','연락처','소속','인원','식사수령','수령시각']);
+    sh.appendRow(['신청시각','티켓번호','신청유형','성함','연락처','나라','인원','식사수령','수령시각']);
     sh.setFrozenRows(1);
   } else if (sh.getRange(1, 3).getValue() !== '신청유형') {
     // 기존 시트(8컬럼)에 신청유형 컬럼을 C열로 삽입
@@ -77,6 +77,9 @@ function register(p){
     var seq = sh.getLastRow();                 // 헤더 포함 행 수 = 다음 일련번호
     var ticket = PREFIX + ('0000' + seq).slice(-4);
     sh.appendRow([new Date(), ticket, type, name, phone, org, count, '', '']);
+    // 연락처(E열)는 앞자리 0이 사라지지 않도록 텍스트로 강제 저장
+    var rownum = sh.getLastRow();
+    sh.getRange(rownum, 5).setNumberFormat('@').setValue(phone);
     return { ok:true, ticket:ticket, name:name, count:count, type:type };
   } finally {
     lock.releaseLock();
