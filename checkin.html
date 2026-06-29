@@ -87,8 +87,14 @@ function showError(msg){
 }
 
 function infoRows(d){
+  var isGroup = (d.type === '단체') || (!!d.org && Number(d.count) > 1);
+  var who = isGroup
+    ? '<div class="row"><span class="k">단체명</span><span class="v">'+esc(d.org||'')+'</span></div>'
+      + '<div class="row"><span class="k">대표자</span><span class="v">'+esc(d.name)+'</span></div>'
+    : '<div class="row"><span class="k">성함</span><span class="v">'+esc(d.name)+'</span></div>';
   return '<div style="margin-top:18px; text-align:left;">'
-    + '<div class="row"><span class="k">성함</span><span class="v">'+esc(d.name)+'</span></div>'
+    + (isGroup ? '<div class="row"><span class="k">신청유형</span><span class="v" style="color:#E9C98A;">단체</span></div>' : '')
+    + who
     + '<div class="row"><span class="k">티켓</span><span class="v" style="letter-spacing:1px; color:#E9C98A;">'+esc(ticket)+'</span></div>'
     + '<div class="row"><span class="k">식사 인원</span><span class="v big">'+esc(d.count)+'<span style="font-size:15px;">명</span></span></div>'
     + '</div>';
@@ -117,7 +123,7 @@ function doCheckin(){
         ? '<div class="badge state-warn" style="background:rgba(230,188,160,.15);">이미 수령함</div>'
         : '<div class="badge state-ok" style="background:rgba(63,176,122,.18);">수령 완료 ✓</div>';
       content.innerHTML = head
-        + infoRows({ name:res.name, count:res.count })
+        + infoRows(res)
         + '<p class="muted" style="margin-top:14px;">'
           + (res.already ? '이전에 이미 수령 처리된 티켓입니다.' : '식사 '+esc(res.count)+'명분을 제공해 주세요.')
           + (res.at?'<br>('+esc(res.at)+')':'') + '</p>';

@@ -70,11 +70,16 @@ const T = {
     // 참가 신청
     regKicker:'Registration',
     regTitle:'참가 신청', regLead:'저녁 식사 준비를 위해 미리 신청해 주세요. 신청하시면 개인 QR이 발급되며, 행사 당일 현장에서 제시하시면 저녁 식사를 받으실 수 있습니다.',
+    tabIndiv:'개인 신청', tabGroup:'단체 신청',
     fldName:'성함', fldNamePh:'홍길동',
     fldPhone:'연락처', fldPhonePh:'010-0000-0000',
     fldOrg:'소속단체', fldOrgPh:'○○교회',
+    fldGroupName:'단체명', fldGroupNamePh:'○○교회 · ○○팀',
+    fldLeader:'대표자 성함', fldLeaderPh:'홍길동',
     fldCount:'참석 인원',
     regSubmit:'신청하고 QR 받기', regBusy:'발급 중…', regFree:'참가비 무료',
+    regNeedGroup:'단체명·대표자 성함·연락처를 입력해 주세요.',
+    ticketOrg:'단체명', ticketLeader:'대표자',
     ticketKicker:'Your Ticket',
     ticketTitle:'신청이 완료되었습니다',
     ticketGuide:'아래 QR을 캡처하거나 이미지로 저장해 두세요. 행사 당일 저녁 식사 시 이 QR을 제시하시면 됩니다.',
@@ -106,11 +111,16 @@ const T = {
     // Registration
     regKicker:'Registration',
     regTitle:'Register', regLead:'Please register in advance so we can prepare the meal. A personal QR code will be issued — show it on site to receive your dinner.',
+    tabIndiv:'Individual', tabGroup:'Group',
     fldName:'Name', fldNamePh:'Your name',
     fldPhone:'Phone', fldPhonePh:'010-0000-0000',
     fldOrg:'Organization', fldOrgPh:'Your church',
+    fldGroupName:'Group name', fldGroupNamePh:'Your church / team',
+    fldLeader:'Leader name', fldLeaderPh:'Representative',
     fldCount:'Guests',
     regSubmit:'Register & Get QR', regBusy:'Issuing…', regFree:'Free admission',
+    regNeedGroup:'Please enter group name, leader name and phone.',
+    ticketOrg:'Group', ticketLeader:'Leader',
     ticketKicker:'Your Ticket',
     ticketTitle:'Registration complete',
     ticketGuide:'Save or screenshot the QR code below. Show it at the dinner on the day of the event.',
@@ -171,8 +181,10 @@ const SHOW_GALLERY = true;
 const SHOW_COUNTDOWN = true;
 
 let lang = 'en';
-let issuedTicket = null;      // { ticket, name, count }
+let issuedTicket = null;      // { ticket, name, count, mode, org }
+let regMode = 'individual';   // 'individual' | 'group'
 let submitting = false;
+const val = id => { const e = document.getElementById(id); return e ? (e.value || '') : ''; };
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
@@ -204,10 +216,19 @@ function regSectionInner(t){
         <canvas id="qr-canvas" width="240" height="240" style="display:block; width:240px; height:240px;"></canvas>
       </div>
       <div style="margin:22px auto 0; max-width:320px; display:flex; flex-direction:column; gap:0; border:1px solid rgba(183,147,90,.25); border-radius:10px; overflow:hidden; background:rgba(255,255,255,.03);">
+        ${issuedTicket.mode==='group' ? `
+        <div style="display:flex; justify-content:space-between; padding:12px 16px; border-bottom:1px solid rgba(183,147,90,.16);">
+          <span style="font-size:12.5px; color:#9A916F;">${esc(t.ticketOrg)}</span>
+          <span style="font-size:13.5px; font-weight:700; color:#F3ECDC;">${esc(issuedTicket.org)}</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; padding:12px 16px; border-bottom:1px solid rgba(183,147,90,.16);">
+          <span style="font-size:12.5px; color:#9A916F;">${esc(t.ticketLeader)}</span>
+          <span style="font-size:13.5px; font-weight:700; color:#F3ECDC;">${esc(issuedTicket.name)}</span>
+        </div>` : `
         <div style="display:flex; justify-content:space-between; padding:12px 16px; border-bottom:1px solid rgba(183,147,90,.16);">
           <span style="font-size:12.5px; color:#9A916F;">${esc(t.ticketName)}</span>
           <span style="font-size:13.5px; font-weight:700; color:#F3ECDC;">${esc(issuedTicket.name)}</span>
-        </div>
+        </div>`}
         <div style="display:flex; justify-content:space-between; padding:12px 16px; border-bottom:1px solid rgba(183,147,90,.16);">
           <span style="font-size:12.5px; color:#9A916F;">${esc(t.ticketNo)}</span>
           <span style="font-size:13.5px; font-weight:700; letter-spacing:1px; color:#E9C98A;">${esc(issuedTicket.ticket)}</span>
@@ -225,12 +246,10 @@ function regSectionInner(t){
   }
   const notice = APP_READY ? '' : `
     <p style="margin:14px 0 0; text-align:center; font-size:12.5px; color:#E6BCA0;">⚠ ${esc(t.regNoConfig)}</p>`;
-  return `
-    <div style="max-width:440px; margin:0 auto;">
-      <p style="margin:0 0 8px; text-align:center; font-size:11px; letter-spacing:4px; color:#B7935A; text-transform:uppercase;">${esc(t.regKicker)}</p>
-      <h2 style="margin:0 0 12px; text-align:center; font-family:'Noto Serif KR',serif; font-weight:600; font-size:28px; color:#F6F0E2;">${esc(t.regTitle)}</h2>
-      <p style="margin:0 auto 28px; text-align:center; font-size:13.5px; line-height:1.85; color:#C2BAA0; max-width:400px;">${esc(t.regLead)}</p>
-      <form onsubmit="submitReg(event)" autocomplete="on">
+  const indiv = regMode === 'individual';
+  const tabSty = on => "flex:1; cursor:pointer; font-family:'Noto Sans KR'; font-size:13.5px; font-weight:700; letter-spacing:.5px; padding:11px 0; border:none; border-radius:999px; transition:all .18s; "
+    + (on ? 'background:#B7935A; color:#0b0e1d;' : 'background:transparent; color:#9A8D6C;');
+  const fields = indiv ? `
         <label style="display:block; margin-bottom:14px;">
           <span style="font-size:12.5px; font-weight:600; color:#E9C98A; letter-spacing:.3px;">${esc(t.fldName)} <span style="color:#E07A5F;">*</span></span>
           <input id="reg-name" class="reg-input" type="text" required placeholder="${esc(t.fldNamePh)}" maxlength="40">
@@ -239,14 +258,37 @@ function regSectionInner(t){
           <span style="font-size:12.5px; font-weight:600; color:#E9C98A; letter-spacing:.3px;">${esc(t.fldPhone)} <span style="color:#E07A5F;">*</span></span>
           <input id="reg-phone" class="reg-input" type="tel" required placeholder="${esc(t.fldPhonePh)}" maxlength="30">
         </label>
-        <label style="display:block; margin-bottom:14px;">
+        <label style="display:block; margin-bottom:22px;">
           <span style="font-size:12.5px; font-weight:600; color:#E9C98A; letter-spacing:.3px;">${esc(t.fldOrg)}</span>
           <input id="reg-org" class="reg-input" type="text" placeholder="${esc(t.fldOrgPh)}" maxlength="60">
+        </label>` : `
+        <label style="display:block; margin-bottom:14px;">
+          <span style="font-size:12.5px; font-weight:600; color:#E9C98A; letter-spacing:.3px;">${esc(t.fldGroupName)} <span style="color:#E07A5F;">*</span></span>
+          <input id="reg-gname" class="reg-input" type="text" required placeholder="${esc(t.fldGroupNamePh)}" maxlength="60">
+        </label>
+        <label style="display:block; margin-bottom:14px;">
+          <span style="font-size:12.5px; font-weight:600; color:#E9C98A; letter-spacing:.3px;">${esc(t.fldLeader)} <span style="color:#E07A5F;">*</span></span>
+          <input id="reg-leader" class="reg-input" type="text" required placeholder="${esc(t.fldLeaderPh)}" maxlength="40">
+        </label>
+        <label style="display:block; margin-bottom:14px;">
+          <span style="font-size:12.5px; font-weight:600; color:#E9C98A; letter-spacing:.3px;">${esc(t.fldPhone)} <span style="color:#E07A5F;">*</span></span>
+          <input id="reg-phone" class="reg-input" type="tel" required placeholder="${esc(t.fldPhonePh)}" maxlength="30">
         </label>
         <label style="display:block; margin-bottom:22px;">
-          <span style="font-size:12.5px; font-weight:600; color:#E9C98A; letter-spacing:.3px;">${esc(t.fldCount)}</span>
-          <input id="reg-count" class="reg-input" type="number" min="1" max="50" value="1" inputmode="numeric">
-        </label>
+          <span style="font-size:12.5px; font-weight:600; color:#E9C98A; letter-spacing:.3px;">${esc(t.fldCount)} <span style="color:#E07A5F;">*</span></span>
+          <input id="reg-count" class="reg-input" type="number" min="2" max="200" value="2" inputmode="numeric">
+        </label>`;
+  return `
+    <div style="max-width:440px; margin:0 auto;">
+      <p style="margin:0 0 8px; text-align:center; font-size:11px; letter-spacing:4px; color:#B7935A; text-transform:uppercase;">${esc(t.regKicker)}</p>
+      <h2 style="margin:0 0 12px; text-align:center; font-family:'Noto Serif KR',serif; font-weight:600; font-size:28px; color:#F6F0E2;">${esc(t.regTitle)}</h2>
+      <p style="margin:0 auto 22px; text-align:center; font-size:13.5px; line-height:1.85; color:#C2BAA0; max-width:400px;">${esc(t.regLead)}</p>
+      <div style="display:flex; gap:6px; margin:0 0 24px; padding:5px; background:rgba(0,0,0,.3); border:1px solid rgba(183,147,90,.3); border-radius:999px;">
+        <button type="button" onclick="setRegMode('individual')" style="${tabSty(indiv)}">${esc(t.tabIndiv)}</button>
+        <button type="button" onclick="setRegMode('group')" style="${tabSty(!indiv)}">${esc(t.tabGroup)}</button>
+      </div>
+      <form onsubmit="submitReg(event)" autocomplete="on">
+        ${fields}
         <button id="reg-btn" type="submit" style="width:100%; cursor:pointer; font-family:'Noto Sans KR'; font-size:15px; font-weight:700; letter-spacing:.5px; color:#0b0e1d; background:#B7935A; border:none; padding:15px; border-radius:999px;">${esc(t.regSubmit)}</button>
         <p style="margin:12px 0 0; text-align:center; font-size:12px; color:#9A916F;">${esc(t.regFree)}</p>
       </form>
@@ -440,25 +482,44 @@ function render(){
 
 function setLang(l){ lang = l; render(); }
 
+function setRegMode(m){
+  if (regMode === m) return;
+  regMode = m;
+  render();
+  const sec = document.getElementById('register');
+  if (sec) sec.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
 async function submitReg(ev){
   ev.preventDefault();
   if (submitting) return;
   const t = T[lang];
-  const name = (document.getElementById('reg-name').value || '').trim();
-  const phone = (document.getElementById('reg-phone').value || '').trim();
-  const org = (document.getElementById('reg-org').value || '').trim();
-  let count = parseInt(document.getElementById('reg-count').value, 10);
-  if (!count || count < 1) count = 1;
-  if (!name || !phone){ alert(t.regNeedName); return; }
+  let name, phone, org, count, type;
+  if (regMode === 'group'){
+    org = val('reg-gname').trim();        // 단체명
+    name = val('reg-leader').trim();      // 대표자 성함
+    phone = val('reg-phone').trim();
+    count = parseInt(val('reg-count'), 10);
+    if (!count || count < 1) count = 1;
+    type = '단체';
+    if (!org || !name || !phone){ alert(t.regNeedGroup); return; }
+  } else {
+    name = val('reg-name').trim();
+    phone = val('reg-phone').trim();
+    org = val('reg-org').trim();
+    count = 1;
+    type = '개인';
+    if (!name || !phone){ alert(t.regNeedName); return; }
+  }
   if (!APP_READY){ alert(t.regNoConfig); return; }
 
   const btn = document.getElementById('reg-btn');
   submitting = true;
   if (btn){ btn.disabled = true; btn.style.opacity = '.6'; btn.textContent = t.regBusy; }
   try {
-    const res = await jsonp({ action:'register', name, phone, org, count });
+    const res = await jsonp({ action:'register', name, phone, org, count, type });
     if (res && res.ok){
-      issuedTicket = { ticket: res.ticket, name: res.name || name, count: res.count || count };
+      issuedTicket = { ticket: res.ticket, name: res.name || name, count: res.count || count, mode: regMode, org: org };
       render();
       const sec = document.getElementById('register');
       if (sec) sec.scrollIntoView({ behavior:'smooth', block:'start' });

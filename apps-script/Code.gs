@@ -52,8 +52,12 @@ function getSheet(){
   var sh = ss.getSheetByName(SHEET_NAME);
   if (!sh){
     sh = ss.insertSheet(SHEET_NAME);
-    sh.appendRow(['신청시각','티켓번호','성함','연락처','소속','인원','식사수령','수령시각']);
+    sh.appendRow(['신청시각','티켓번호','신청유형','성함','연락처','소속','인원','식사수령','수령시각']);
     sh.setFrozenRows(1);
+  } else if (sh.getRange(1, 3).getValue() !== '신청유형') {
+    // 기존 시트(8컬럼)에 신청유형 컬럼을 C열로 삽입
+    sh.insertColumnBefore(3);
+    sh.getRange(1, 3).setValue('신청유형');
   }
   return sh;
 }
@@ -62,7 +66,8 @@ function register(p){
   var name  = (p.name  || '').toString().trim();
   var phone = (p.phone || '').toString().trim();
   var org   = (p.org   || '').toString().trim();
-  var count = parseInt(p.count, 10); if (!count || count < 1) count = 1; if (count > 50) count = 50;
+  var type  = (p.type  || '').toString().trim() || '개인';
+  var count = parseInt(p.count, 10); if (!count || count < 1) count = 1; if (count > 200) count = 200;
   if (!name || !phone) return { ok:false, error:'성함과 연락처는 필수입니다.' };
 
   var lock = LockService.getScriptLock();
@@ -71,8 +76,8 @@ function register(p){
     var sh = getSheet();
     var seq = sh.getLastRow();                 // 헤더 포함 행 수 = 다음 일련번호
     var ticket = PREFIX + ('0000' + seq).slice(-4);
-    sh.appendRow([new Date(), ticket, name, phone, org, count, '', '']);
-    return { ok:true, ticket:ticket, name:name, count:count };
+    sh.appendRow([new Date(), ticket, type, name, phone, org, count, '', '']);
+    return { ok:true, ticket:ticket, name:name, count:count, type:type };
   } finally {
     lock.releaseLock();
   }
@@ -92,7 +97,7 @@ function lookup(t){
   var f = findRow(t);
   if (!f) return { ok:false, error:'not found' };
   var r = f.rec;
-  return { ok:true, ticket:t, name:r[2], count:r[5], checkedIn: !!r[6], at: r[7] ? fmt(r[7]) : '' };
+  return { ok:true, ticket:t, type:r[2], name:r[3], org:r[5], count:r[6], checkedIn: !!r[7], at: r[8] ? fmt(r[8]) : '' };
 }
 
 function checkin(t){
@@ -103,11 +108,11 @@ function checkin(t){
     var f = findRow(t);
     if (!f) return { ok:false, error:'not found' };
     var r = f.rec;
-    if (r[6]) return { ok:true, already:true, name:r[2], count:r[5], at: r[7] ? fmt(r[7]) : '' };
+    if (r[7]) return { ok:true, already:true, type:r[2], name:r[3], org:r[5], count:r[6], at: r[8] ? fmt(r[8]) : '' };
     var now = new Date();
-    f.sh.getRange(f.row, 7).setValue('수령');
-    f.sh.getRange(f.row, 8).setValue(now);
-    return { ok:true, already:false, name:r[2], count:r[5], at: fmt(now) };
+    f.sh.getRange(f.row, 8).setValue('수령');
+    f.sh.getRange(f.row, 9).setValue(now);
+    return { ok:true, already:false, type:r[2], name:r[3], org:r[5], count:r[6], at: fmt(now) };
   } finally {
     lock.releaseLock();
   }
