@@ -9,5 +9,5 @@
       아래 따옴표 안에 붙여넣으세요.
    ============================================================ */
 window.EVENT_CONFIG = {
-  APPS_SCRIPT_URL: ""
+  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbx9e7rVmq0ImFdZemBhj93CJHS3PxgS5SISuhcdtGR5bH0TCsCu8IsHKGeTjEsQGeU/exec"
 };
