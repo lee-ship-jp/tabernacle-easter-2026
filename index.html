@@ -61,7 +61,7 @@ const T = {
     heroDateBig:'2026. 7. 15 水', heroDateSub:'오후 5시 30분 · 부산 벡스코(BEXCO)',
     ctaApply:'참가 신청하기', ctaSchedule:'행사 일정 보기',
     schedTitle:'행사 일정', schedIntro:'따뜻한 저녁 식사를 함께 나누고, 부활절 콘서트의 감동으로 하루를 마무리합니다.',
-    mealTitle:'함께 나누는 저녁 식사', mealBadge:'전원 무료 제공',
+    mealTitle:'함께 나누는 저녁 식사', mealBadge:'신청자 한정 · 무료',
     concTitle:'부활절 콘서트',
     progTitle:'프로그램',
     locTitle:'오시는 길', locVenue:'부산 벡스코 (BEXCO)',
@@ -92,7 +92,7 @@ const T = {
     footSponsorPre:'후원 ', footSponsor:'모닝듀워십',
     footContact:'문의 안내는 추후 공지됩니다',
     cdDays:'DAYS', cdHrs:'HRS', cdMin:'MIN', cdSec:'SEC',
-    kProgram:'Program of the Day', kDinner:'Dinner · 18:00',
+    kProgram:'Program of the Day', kDinner:'Dinner · 5:30–6:30 PM',
     kConcert:'Easter Concert · 18:30', kVenue:'Venue', kReg:'Registration'
   },
   en: {
@@ -102,7 +102,7 @@ const T = {
     heroDateBig:'Wed · July 15, 2026', heroDateSub:'5:30 PM · BEXCO, Busan',
     ctaApply:'Register Now', ctaSchedule:'View Schedule',
     schedTitle:'Schedule', schedIntro:'Share a warm dinner together and close the day with the moving Easter concert.',
-    mealTitle:'Dinner Together', mealBadge:'Free for everyone',
+    mealTitle:'Dinner Together', mealBadge:'Registered guests only',
     concTitle:'Easter Concert',
     progTitle:'Program',
     locTitle:'Location', locVenue:'BEXCO, Busan',
@@ -133,19 +133,19 @@ const T = {
     footSponsorPre:'Sponsored by ', footSponsor:'Morning Dew Worship',
     footContact:'Contact details to be announced',
     cdDays:'DAYS', cdHrs:'HRS', cdMin:'MIN', cdSec:'SEC',
-    kProgram:'Program of the Day', kDinner:'Dinner · 18:00',
+    kProgram:'Program of the Day', kDinner:'Dinner · 5:30–6:30 PM',
     kConcert:'Easter Concert · 18:30', kVenue:'Venue', kReg:'Registration'
   }
 };
 const SCHED = {
   ko:[
     { time:'17:30', title:'입장 · 접수', desc:'행사장 입장 및 참가 접수.', tag:'' },
-    { time:'18:00', title:'저녁 식사', desc:'정성껏 준비한 식사를 함께 나눕니다. (신청 QR 제시)', tag:'무료 제공' },
+    { time:'17:30~18:30', title:'저녁 식사 (버거)', desc:'사전에 참가 신청(접수)하신 분에 한해 버거를 제공합니다. 현장에서 신청 QR을 제시해 주세요.', tag:'신청자 한정' },
     { time:'18:30', title:'부활절 콘서트 〈Were You There〉', desc:'그라시아스 합창단·오케스트라의 부활의 울림.', tag:'' }
   ],
   en:[
     { time:'5:30', title:'Doors & Check-in', desc:'Entrance and registration check-in.', tag:'' },
-    { time:'6:00', title:'Dinner', desc:'Share a meal prepared with care. (Show your QR)', tag:'Free' },
+    { time:'5:30~6:30', title:'Dinner (Burger)', desc:'Burgers are served to pre-registered guests only. Show your QR on site.', tag:'Registered only' },
     { time:'6:30', title:'Easter Concert 〈Were You There〉', desc:'Resurrection echoes of Gracias Choir & Orchestra.', tag:'' }
   ]
 };
@@ -164,8 +164,8 @@ const PROG = {
   ]
 };
 const MEAL_BODY = {
-  ko:'정성껏 준비한 저녁 식사를 무료로 제공합니다. 참가 신청 시 발급되는 개인 QR을 현장에서 제시하시면 식사를 받으실 수 있습니다.',
-  en:'A dinner prepared with care is provided free of charge. Show the personal QR issued at registration to receive your meal on site.'
+  ko:'오후 5시 30분부터 6시 30분까지 저녁 식사(버거)를 제공합니다. 사전에 참가 신청(접수)하신 분에 한하며, 현장에서 발급받은 개인 QR을 제시하시면 받으실 수 있습니다.',
+  en:'Dinner (burgers) is served from 5:30 to 6:30 PM. It is available to pre-registered guests only — show the personal QR issued at registration to receive it on site.'
 };
 const CONC_BODY = {
   ko:'부활절 콘서트 〈Were You There〉는 성경 속 예수 그리스도의 고난과 부활의 기록을 무대 위에 그대로 그려냅니다. 그라시아스 합창단과 오케스트라가 빚어내는 깊은 울림은 부활의 진정한 의미와 그 기쁨을 새롭게 일깨워 줍니다.',
